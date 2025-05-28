@@ -4,6 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: edelta.example.migration.library.migrator
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
+Export-Package: edelta.example.migration.library.migrator
 Bundle-SymbolicName: edelta.example.migration.library.migrator; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: edelta.refactorings.lib;visibility:=reexport,
