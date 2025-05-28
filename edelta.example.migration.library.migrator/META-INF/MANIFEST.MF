@@ -6,5 +6,6 @@ Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: edelta.example.migration.library.migrator; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: edelta.lib
+Require-Bundle: edelta.refactorings.lib;visibility:=reexport,
+ edelta.example.migration.library
 Bundle-RequiredExecutionEnvironment: JavaSE-17

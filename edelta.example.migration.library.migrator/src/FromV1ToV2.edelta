@@ -1,0 +1,15 @@
+migrate "http://edelta/Library/v1" to "http://edelta/Library/v2"
+migrate "http://edelta/Books/v1" to "http://edelta/Books/v2"
+
+modifyEcore introduceOpposites epackage books {
+	ecoreref(Book) => [
+		addNewEReference("database", ecoreref(BookDatabase)) [
+			makeBidirectional(ecoreref(books.BookDatabase.books))
+		]
+		addNewEReference("libraries", ecoreref(Library)) [
+			makeMultiple
+		]
+	]
+	ecoreref(library.Library.books)
+		.makeBidirectional(ecoreref(libraries))
+}
