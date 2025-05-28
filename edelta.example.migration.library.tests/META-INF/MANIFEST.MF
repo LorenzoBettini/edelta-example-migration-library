@@ -10,8 +10,9 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: books.tests,
  library.tests
-Require-Bundle: org.eclipse.core.runtime,
- edelta.example.migration.library;visibility:=reexport,
+Require-Bundle: edelta.example.migration.library;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
- org.junit;visibility:=reexport
+ org.junit;visibility:=reexport,
+ edelta.example.migration.library.migrator,
+ edelta.testutils
 Bundle-ActivationPolicy: lazy
