@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Library Migrator Ui
+Bundle-SymbolicName: edelta.example.migration.library.migrator.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Lorenzo Bettini
+Require-Bundle: org.eclipse.swt,
+ org.eclipse.jface,
+ org.eclipse.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore,
+ edelta.example.migration.library.migrator,
+ edelta.example.migration.library.editor
+Automatic-Module-Name: edelta.example.migration.library.migrator.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-17
