@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books:BookDatabase
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:books="http://edelta/Books/v1">
+  <books title="another book"/>
+  <books title="yet another book"/>
+</books:BookDatabase>
