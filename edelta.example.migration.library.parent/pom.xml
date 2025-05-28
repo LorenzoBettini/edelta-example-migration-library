@@ -1,0 +1,231 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.github.lorenzobettini.edelta.examples</groupId>
+	<artifactId>edelta.example.migration.library.parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Edelta Migration Example Library</name>
+	<url>https://github.com/LorenzoBettini/edelta-example-migration-library</url>
+	<description>Edelta Migration Example Personlist.</description>
+
+	<licenses>
+		<license>
+			<name>Eclipse Public License</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Lorenzo Bettini</name>
+			<email>lorenzo.bettini@gmail.com</email>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<organization>DISIA Dipartimento di Statistica, Informatica, Applicazioni</organization>
+			<organizationUrl>https://www.disia.unifi.it/</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>git@github.com:LorenzoBettini/edelta-example-migration-library.git</url>
+		<developerConnection>scm:git:https://github.com/LorenzoBettini/edelta-example-migration-library.git</developerConnection>
+		<connection>scm:git:git@github.com/LorenzoBettini/edelta-example-migration-library.git</connection>
+	</scm>
+
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/LorenzoBettini/edelta-example-migration-library/issues</url>
+	</issueManagement>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tycho-version>4.0.12</tycho-version>
+		<edelta-version>3.8.6</edelta-version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+
+		<nexus-staging-url>https://s01.oss.sonatype.org/</nexus-staging-url>
+		<maven-deploy-plugin-version>3.1.4</maven-deploy-plugin-version>
+		<maven-install-plugin-version>3.1.4</maven-install-plugin-version>
+		<nexus-staging-maven-plugin-version>1.7.0</nexus-staging-maven-plugin-version>
+		<maven-javadoc-plugin-version>3.11.2</maven-javadoc-plugin-version>
+		<maven-source-plugin-version>3.3.1</maven-source-plugin-version>
+		<maven-gpg-plugin-version>3.2.7</maven-gpg-plugin-version>
+	</properties>
+
+	<modules>
+		<module>../edelta.example.migration.library/</module>
+		<module>../edelta.example.migration.library.edit/</module>
+		<module>../edelta.example.migration.library.editor/</module>
+		<module>../edelta.example.migration.library.migrator/</module>
+		<module>../edelta.example.migration.library.tests/</module>
+		<module>../edelta.example.migration.library.migrator.ui/</module>
+		<module>../edelta.example.migration.library.ui.tests/</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.github.lorenzobettini.edelta</groupId>
+				<artifactId>edelta.bom</artifactId>
+				<version>${edelta-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<target>
+						<file>
+							${project.basedir}/../edelta.example.migration.library.parent/library.target
+						</file>
+					</target>
+					<referencedRepositoryMode>include</referencedRepositoryMode>
+					<environments>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>aarch64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>aarch64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<!-- required to have valid consumable Maven artifacts -->
+						<skipPomGeneration>true</skipPomGeneration>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<!-- For deployment:
+		mvn -f edelta.example.migration.library.parent deploy -DskipTests -Psonatype-oss-release
+		find ~/.m2/repository -name "*library*" -exec rm -rf {} \+
+		-->
+		<profile>
+			<id>sonatype-oss-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>${nexus-staging-maven-plugin-version}</version>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin-version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${maven-javadoc-plugin-version}</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<!-- Use the following configuration with Java 8 -->
+								<configuration>
+									<doclint>none</doclint>
+									<failOnError>false</failOnError>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>${maven-gpg-plugin-version}</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<!-- Prevent gpg from using pinentry programs -->
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+</project>

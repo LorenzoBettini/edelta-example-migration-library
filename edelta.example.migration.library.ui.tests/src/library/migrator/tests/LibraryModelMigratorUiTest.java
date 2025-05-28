@@ -1,4 +1,4 @@
-package persons.migrator.tests;
+package library.migrator.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

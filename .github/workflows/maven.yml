@@ -1,0 +1,52 @@
+name: Java CI with Maven
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 21
+        distribution: temurin
+
+    - name: Cache Maven packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.target') }}
+        restore-keys: ${{ runner.os }}-m2-
+
+    - name: Build with Maven
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: mvn -f edelta.example.migration.library.parent -U verify
+
+    - name: Archive Test Results
+      uses: actions/upload-artifact@v4
+      if: ${{ failure() || cancelled() }}
+      with:
+        name: test-results-${{ runner.os }}
+        path: '**/*.tests/target/surefire-reports'
+    - name: Archive UI Tests Screenshots
+      uses: actions/upload-artifact@v4
+      if: ${{ failure() || cancelled() }}
+      with:
+        name: screenshots-${{ runner.os }}
+        path: '**/*.tests/screenshots'
+    - name: Archive Logs
+      uses: actions/upload-artifact@v4
+      if: ${{ failure() || cancelled() }}
+      with:
+        name: logs-${{ runner.os }}
+        path: '**/*.tests/target/**/*.log'
