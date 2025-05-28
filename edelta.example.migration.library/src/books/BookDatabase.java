@@ -26,11 +26,13 @@ public interface BookDatabase extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Books</b></em>' containment reference list.
 	 * The list contents are of type {@link books.Book}.
+	 * It is bidirectional and its opposite is '{@link books.Book#getDatabase <em>Database</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Books</em>' containment reference list.
 	 * @see books.BooksPackage#getBookDatabase_Books()
-	 * @model containment="true"
+	 * @see books.Book#getDatabase
+	 * @model opposite="database" containment="true"
 	 * @generated
 	 */
 	EList<Book> getBooks();

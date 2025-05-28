@@ -151,6 +151,26 @@ public class BooksPackageImpl extends EPackageImpl implements BooksPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getBook_Database() {
+		return (EReference)bookEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBook_Libraries() {
+		return (EReference)bookEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BooksFactory getBooksFactory() {
 		return (BooksFactory)getEFactoryInstance();
 	}
@@ -179,6 +199,8 @@ public class BooksPackageImpl extends EPackageImpl implements BooksPackage {
 
 		bookEClass = createEClass(BOOK);
 		createEAttribute(bookEClass, BOOK__TITLE);
+		createEReference(bookEClass, BOOK__DATABASE);
+		createEReference(bookEClass, BOOK__LIBRARIES);
 	}
 
 	/**
@@ -204,6 +226,9 @@ public class BooksPackageImpl extends EPackageImpl implements BooksPackage {
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		LibraryPackage theLibraryPackage = (LibraryPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryPackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -212,10 +237,12 @@ public class BooksPackageImpl extends EPackageImpl implements BooksPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(bookDatabaseEClass, BookDatabase.class, "BookDatabase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBookDatabase_Books(), this.getBook(), null, "books", null, 0, -1, BookDatabase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBookDatabase_Books(), this.getBook(), this.getBook_Database(), "books", null, 0, -1, BookDatabase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(bookEClass, Book.class, "Book", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBook_Title(), ecorePackage.getEString(), "title", null, 0, 1, Book.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBook_Database(), this.getBookDatabase(), this.getBookDatabase_Books(), "database", null, 0, 1, Book.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBook_Libraries(), theLibraryPackage.getLibrary(), theLibraryPackage.getLibrary_Books(), "libraries", null, 0, -1, Book.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

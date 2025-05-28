@@ -63,6 +63,7 @@ public class BookItemProvider
 			super.getPropertyDescriptors(object);
 
 			addTitlePropertyDescriptor(object);
+			addLibrariesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -85,6 +86,28 @@ public class BookItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Libraries feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLibrariesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Book_libraries_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Book_libraries_feature", "_UI_Book_type"),
+				 BooksPackage.Literals.BOOK__LIBRARIES,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

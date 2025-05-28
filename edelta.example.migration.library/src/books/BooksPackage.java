@@ -38,7 +38,7 @@ public interface BooksPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Books/v1";
+	String eNS_URI = "http://edelta/Books/v2";
 
 	/**
 	 * The package namespace name.
@@ -113,13 +113,31 @@ public interface BooksPackage extends EPackage {
 	int BOOK__TITLE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Database</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK__DATABASE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Libraries</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK__LIBRARIES = 2;
+
+	/**
 	 * The number of structural features of the '<em>Book</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOK_FEATURE_COUNT = 1;
+	int BOOK_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Book</em>' class.
@@ -172,6 +190,28 @@ public interface BooksPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getBook_Title();
+
+	/**
+	 * Returns the meta object for the container reference '{@link books.Book#getDatabase <em>Database</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Database</em>'.
+	 * @see books.Book#getDatabase()
+	 * @see #getBook()
+	 * @generated
+	 */
+	EReference getBook_Database();
+
+	/**
+	 * Returns the meta object for the reference list '{@link books.Book#getLibraries <em>Libraries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Libraries</em>'.
+	 * @see books.Book#getLibraries()
+	 * @see #getBook()
+	 * @generated
+	 */
+	EReference getBook_Libraries();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -231,6 +271,22 @@ public interface BooksPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BOOK__TITLE = eINSTANCE.getBook_Title();
+
+		/**
+		 * The meta object literal for the '<em><b>Database</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOK__DATABASE = eINSTANCE.getBook_Database();
+
+		/**
+		 * The meta object literal for the '<em><b>Libraries</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOK__LIBRARIES = eINSTANCE.getBook_Libraries();
 
 	}
 

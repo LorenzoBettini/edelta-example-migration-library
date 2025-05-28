@@ -16,8 +16,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -71,9 +70,24 @@ public class BookDatabaseImpl extends MinimalEObjectImpl.Container implements Bo
 	@Override
 	public EList<Book> getBooks() {
 		if (books == null) {
-			books = new EObjectContainmentEList<Book>(Book.class, this, BooksPackage.BOOK_DATABASE__BOOKS);
+			books = new EObjectContainmentWithInverseEList<Book>(Book.class, this, BooksPackage.BOOK_DATABASE__BOOKS, BooksPackage.BOOK__DATABASE);
 		}
 		return books;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case BooksPackage.BOOK_DATABASE__BOOKS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getBooks()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Library/v1";
+	String eNS_URI = "http://edelta/Library/v2";
 
 	/**
 	 * The package namespace name.

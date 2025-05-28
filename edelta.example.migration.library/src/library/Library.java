@@ -28,11 +28,13 @@ public interface Library extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Books</b></em>' reference list.
 	 * The list contents are of type {@link books.Book}.
+	 * It is bidirectional and its opposite is '{@link books.Book#getLibraries <em>Libraries</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Books</em>' reference list.
 	 * @see library.LibraryPackage#getLibrary_Books()
-	 * @model
+	 * @see books.Book#getLibraries
+	 * @model opposite="libraries"
 	 * @generated
 	 */
 	EList<Book> getBooks();
