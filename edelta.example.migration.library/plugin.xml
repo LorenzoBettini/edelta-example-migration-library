@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Library -->
+      <package
+            uri="http://edelta/Library/v1"
+            class="library.LibraryPackage"
+            genModel="model/Library.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Library -->
+      <package
+            uri="http://edelta/Books/v1"
+            class="books.BooksPackage"
+            genModel="model/Library.genmodel"/>
+   </extension>
+
+</plugin>

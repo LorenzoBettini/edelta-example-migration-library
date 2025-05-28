@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated Library -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="library.presentation.LibraryModelWizardID"
+            name="%_UI_LibraryModelWizard_label"
+            class="library.presentation.LibraryModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/LibraryModelFile.gif">
+         <description>%_UI_LibraryModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated Library -->
+      <editor
+            id="library.presentation.LibraryEditorID"
+            name="%_UI_LibraryEditor_label"
+            icon="icons/full/obj16/LibraryModelFile.gif"
+            extensions="library"
+            class="library.presentation.LibraryEditor"
+            contributorClass="library.presentation.LibraryActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated Library -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="books.presentation.BooksModelWizardID"
+            name="%_UI_BooksModelWizard_label"
+            class="books.presentation.BooksModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/BooksModelFile.gif">
+         <description>%_UI_BooksModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated Library -->
+      <editor
+            id="books.presentation.BooksEditorID"
+            name="%_UI_BooksEditor_label"
+            icon="icons/full/obj16/BooksModelFile.gif"
+            extensions="books"
+            class="books.presentation.BooksEditor"
+            contributorClass="books.presentation.BooksActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
