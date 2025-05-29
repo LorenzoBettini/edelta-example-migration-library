@@ -11,11 +11,13 @@ import library.Library;
 import library.LibraryFactory;
 import library.LibraryPackage;
 
+import library.util.LibraryValidator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -96,6 +98,16 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		// Initialize created meta-data
 		theLibraryPackage.initializePackageContents();
 		theBooksPackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theLibraryPackage,
+			 new EValidator.Descriptor() {
+				 @Override
+				 public EValidator getEValidator() {
+					 return LibraryValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		theLibraryPackage.freeze();
@@ -246,6 +258,26 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore";
+		addAnnotation
+		  (libraryEClass,
+		   source,
+		   new String[] {
+			   "constraints", "noDuplicateBooks"
+		   });
 	}
 
 } //LibraryPackageImpl

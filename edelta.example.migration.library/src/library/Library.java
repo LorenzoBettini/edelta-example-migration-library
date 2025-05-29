@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see library.LibraryPackage#getLibrary()
- * @model
+ * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='noDuplicateBooks'"
  * @generated
  */
 public interface Library extends EObject {
