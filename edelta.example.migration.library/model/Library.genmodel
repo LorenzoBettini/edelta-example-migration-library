@@ -13,6 +13,7 @@
     <genClasses ecoreClass="Library.ecore#//BookItem">
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Library.ecore#//BookItem/book"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Library.ecore#//BookItem/library"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Library.ecore#//BookItem/numOfCopies"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Books" disposableProviderFactory="true" ecorePackage="Books.ecore#/">
