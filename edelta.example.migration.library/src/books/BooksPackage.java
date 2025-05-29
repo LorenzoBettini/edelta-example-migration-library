@@ -38,7 +38,7 @@ public interface BooksPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Books/v3";
+	String eNS_URI = "http://edelta/Books/v4";
 
 	/**
 	 * The package namespace name.

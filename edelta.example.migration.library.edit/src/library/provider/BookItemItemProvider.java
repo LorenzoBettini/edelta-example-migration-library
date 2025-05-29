@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import books.Book;
@@ -61,6 +62,7 @@ public class BookItemItemProvider
 			super.getPropertyDescriptors(object);
 
 			addBookPropertyDescriptor(object);
+			addNumOfCopiesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -88,6 +90,28 @@ public class BookItemItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Num Of Copies feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNumOfCopiesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BookItem_numOfCopies_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BookItem_numOfCopies_feature", "_UI_BookItem_type"),
+				 LibraryPackage.Literals.BOOK_ITEM__NUM_OF_COPIES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BookItem.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,7 +129,8 @@ public class BookItemItemProvider
 	 * @generated
 	 */
 	public String getTextGen(Object object) {
-		return getString("_UI_BookItem_type");
+		BookItem bookItem = (BookItem)object;
+		return getString("_UI_BookItem_type") + " " + bookItem.getNumOfCopies();
 	}
 
 	@Override
@@ -133,6 +158,7 @@ public class BookItemItemProvider
 
 		switch (notification.getFeatureID(BookItem.class)) {
 			case LibraryPackage.BOOK_ITEM__BOOK:
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

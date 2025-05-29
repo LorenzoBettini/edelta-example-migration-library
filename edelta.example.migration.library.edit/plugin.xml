@@ -9,7 +9,7 @@
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <!-- @generated Library -->
       <factory
-            uri="http://edelta/Library/v3"
+            uri="http://edelta/Library/v4"
             class="library.provider.LibraryItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
@@ -22,7 +22,7 @@
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <!-- @generated Library -->
       <factory
-            uri="http://edelta/Books/v3"
+            uri="http://edelta/Books/v4"
             class="books.provider.BooksItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider

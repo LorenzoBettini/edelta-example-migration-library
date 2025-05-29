@@ -2,6 +2,7 @@
  */
 package library;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -37,7 +38,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Library/v3";
+	String eNS_URI = "http://edelta/Library/v4";
 
 	/**
 	 * The package namespace name.
@@ -122,13 +123,22 @@ public interface LibraryPackage extends EPackage {
 	int BOOK_ITEM__LIBRARY = 1;
 
 	/**
+	 * The feature id for the '<em><b>Num Of Copies</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK_ITEM__NUM_OF_COPIES = 2;
+
+	/**
 	 * The number of structural features of the '<em>Book Item</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOK_ITEM_FEATURE_COUNT = 2;
+	int BOOK_ITEM_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Book Item</em>' class.
@@ -192,6 +202,17 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBookItem_Library();
+
+	/**
+	 * Returns the meta object for the attribute '{@link library.BookItem#getNumOfCopies <em>Num Of Copies</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Num Of Copies</em>'.
+	 * @see library.BookItem#getNumOfCopies()
+	 * @see #getBookItem()
+	 * @generated
+	 */
+	EAttribute getBookItem_NumOfCopies();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -259,6 +280,14 @@ public interface LibraryPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BOOK_ITEM__LIBRARY = eINSTANCE.getBookItem_Library();
+
+		/**
+		 * The meta object literal for the '<em><b>Num Of Copies</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BOOK_ITEM__NUM_OF_COPIES = eINSTANCE.getBookItem_NumOfCopies();
 
 	}
 

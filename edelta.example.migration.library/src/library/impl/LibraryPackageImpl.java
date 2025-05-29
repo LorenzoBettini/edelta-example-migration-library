@@ -11,6 +11,7 @@ import library.Library;
 import library.LibraryFactory;
 import library.LibraryPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -160,6 +161,16 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getBookItem_NumOfCopies() {
+		return (EAttribute)bookItemEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public LibraryFactory getLibraryFactory() {
 		return (LibraryFactory)getEFactoryInstance();
 	}
@@ -189,6 +200,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		bookItemEClass = createEClass(BOOK_ITEM);
 		createEReference(bookItemEClass, BOOK_ITEM__BOOK);
 		createEReference(bookItemEClass, BOOK_ITEM__LIBRARY);
+		createEAttribute(bookItemEClass, BOOK_ITEM__NUM_OF_COPIES);
 	}
 
 	/**
@@ -230,6 +242,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		initEClass(bookItemEClass, BookItem.class, "BookItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBookItem_Book(), theBooksPackage.getBook(), theBooksPackage.getBook_LibraryBookItems(), "book", null, 1, 1, BookItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBookItem_Library(), this.getLibrary(), this.getLibrary_BookItems(), "library", null, 1, 1, BookItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBookItem_NumOfCopies(), ecorePackage.getEInt(), "numOfCopies", "1", 0, 1, BookItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

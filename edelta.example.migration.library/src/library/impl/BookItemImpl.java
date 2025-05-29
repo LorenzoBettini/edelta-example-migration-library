@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <ul>
  *   <li>{@link library.impl.BookItemImpl#getBook <em>Book</em>}</li>
  *   <li>{@link library.impl.BookItemImpl#getLibrary <em>Library</em>}</li>
+ *   <li>{@link library.impl.BookItemImpl#getNumOfCopies <em>Num Of Copies</em>}</li>
  * </ul>
  *
  * @generated
@@ -44,6 +45,25 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 	 * @ordered
 	 */
 	protected Book book;
+
+	/**
+	 * The default value of the '{@link #getNumOfCopies() <em>Num Of Copies</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNumOfCopies()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int NUM_OF_COPIES_EDEFAULT = 1;
+	/**
+	 * The cached value of the '{@link #getNumOfCopies() <em>Num Of Copies</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNumOfCopies()
+	 * @generated
+	 * @ordered
+	 */
+	protected int numOfCopies = NUM_OF_COPIES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -175,6 +195,29 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 	 * @generated
 	 */
 	@Override
+	public int getNumOfCopies() {
+		return numOfCopies;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNumOfCopies(int newNumOfCopies) {
+		int oldNumOfCopies = numOfCopies;
+		numOfCopies = newNumOfCopies;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.BOOK_ITEM__NUM_OF_COPIES, oldNumOfCopies, numOfCopies));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryPackage.BOOK_ITEM__BOOK:
@@ -232,6 +275,8 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 				return basicGetBook();
 			case LibraryPackage.BOOK_ITEM__LIBRARY:
 				return getLibrary();
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
+				return getNumOfCopies();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -249,6 +294,9 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 				return;
 			case LibraryPackage.BOOK_ITEM__LIBRARY:
 				setLibrary((Library)newValue);
+				return;
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
+				setNumOfCopies((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -268,6 +316,9 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 			case LibraryPackage.BOOK_ITEM__LIBRARY:
 				setLibrary((Library)null);
 				return;
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
+				setNumOfCopies(NUM_OF_COPIES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -284,8 +335,26 @@ public class BookItemImpl extends MinimalEObjectImpl.Container implements BookIt
 				return book != null;
 			case LibraryPackage.BOOK_ITEM__LIBRARY:
 				return getLibrary() != null;
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
+				return numOfCopies != NUM_OF_COPIES_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (numOfCopies: ");
+		result.append(numOfCopies);
+		result.append(')');
+		return result.toString();
 	}
 
 } //BookItemImpl

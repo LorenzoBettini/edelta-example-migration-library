@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link library.BookItem#getBook <em>Book</em>}</li>
  *   <li>{@link library.BookItem#getLibrary <em>Library</em>}</li>
+ *   <li>{@link library.BookItem#getNumOfCopies <em>Num Of Copies</em>}</li>
  * </ul>
  *
  * @see library.LibraryPackage#getBookItem()
@@ -71,5 +72,28 @@ public interface BookItem extends EObject {
 	 * @generated
 	 */
 	void setLibrary(Library value);
+
+	/**
+	 * Returns the value of the '<em><b>Num Of Copies</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Num Of Copies</em>' attribute.
+	 * @see #setNumOfCopies(int)
+	 * @see library.LibraryPackage#getBookItem_NumOfCopies()
+	 * @model default="1"
+	 * @generated
+	 */
+	int getNumOfCopies();
+
+	/**
+	 * Sets the value of the '{@link library.BookItem#getNumOfCopies <em>Num Of Copies</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Num Of Copies</em>' attribute.
+	 * @see #getNumOfCopies()
+	 * @generated
+	 */
+	void setNumOfCopies(int value);
 
 } // BookItem
