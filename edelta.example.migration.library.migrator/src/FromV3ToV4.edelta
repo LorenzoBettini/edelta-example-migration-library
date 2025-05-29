@@ -1,14 +1,47 @@
-import edelta.refactorings.lib.EdeltaRefactorings
+import java.util.LinkedHashMap
+import java.util.stream.Collectors
 
 metamodel "ecore"
 
 migrate "http://edelta/Library/v3" to "http://edelta/Library/v4"
 migrate "http://edelta/Books/v3" to "http://edelta/Books/v4"
 
-use EdeltaRefactorings as refactorings
-
 modifyEcore compactItems epackage library {
 	ecoreref(BookItem).addNewEAttribute("numOfCopies", ecoreref(EInt)) [
 		defaultValue = 1
 	]
+
+	val bookItemsFeature = ecoreref(library.Library.bookItems)
+	val bookFeature = ecoreref(library.BookItem.book)
+	val numOfCopiesFeature = ecoreref(BookItem.numOfCopies)
+	modelMigration[
+		copyRule(
+			wasRelatedTo(bookItemsFeature),
+			[oldBookItemsFeature, oldLibrary, newLibrary |
+				val origElements = oldLibrary.getValueAsList(oldBookItemsFeature)
+
+				val groupedByBook = origElements.stream
+					.collect(Collectors.groupingBy(
+						// group by the old bookFeature
+						[oldBookItem|
+							oldBookItem.getValueAsEObject(getOriginal(bookFeature))],
+						[new LinkedHashMap], // to have a deterministic order
+						Collectors.toList))
+
+				val newBookItems = groupedByBook.entrySet.stream
+					.map[entry|
+						// create a single copy for the old items referring to the same book
+						// (take the first one since they are all the same)
+						var oldBookItem = entry.value.head;
+						createFrom(getMigrated(oldBookItem.eClass), oldBookItem) [
+							// set the new counting value to the number of items in the old model
+							eSet(numOfCopiesFeature, entry.value.size)
+						]
+					].toList
+
+				newLibrary.eSet(bookItemsFeature, newBookItems)
+			]
+		)
+	]
+
 }

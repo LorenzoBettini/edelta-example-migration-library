@@ -6,8 +6,6 @@
   <books title="first book">
     <libraryBookItems
         href="MyLibrary1.library#//@bookItems.0"/>
-    <libraryBookItems
-        href="MyLibrary1.library#//@bookItems.2"/>
   </books>
   <books title="second book">
     <libraryBookItems
