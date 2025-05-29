@@ -46,6 +46,8 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -124,6 +126,8 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import books.provider.BooksItemProviderAdapterFactory;
 import library.presentation.LibraryEditorPlugin;
 import library.provider.LibraryItemProviderAdapterFactory;
+import org.eclipse.emf.common.command.AbstractCommand;
+import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 
 
 /**
@@ -448,17 +452,24 @@ public class BooksEditor
 						protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
 						@Override
-						public boolean visit(IResourceDelta delta) {
+						public boolean visit(final IResourceDelta delta) {
 							if (delta.getResource().getType() == IResource.FILE) {
 								if (delta.getKind() == IResourceDelta.REMOVED ||
-								    delta.getKind() == IResourceDelta.CHANGED && delta.getFlags() != IResourceDelta.MARKERS) {
-									Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+								    delta.getKind() == IResourceDelta.CHANGED) {
+									final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
 									if (resource != null) {
 										if (delta.getKind() == IResourceDelta.REMOVED) {
 											removedResources.add(resource);
 										}
-										else if (!savedResources.remove(resource)) {
-											changedResources.add(resource);
+										else {
+											if ((delta.getFlags() & IResourceDelta.MARKERS) != 0) {
+												DiagnosticDecorator.DiagnosticAdapter.update(resource, markerHelper.getMarkerDiagnostics(resource, (IFile)delta.getResource(), false));
+											}
+											if ((delta.getFlags() & IResourceDelta.CONTENT) != 0) {
+												if (!savedResources.remove(resource)) {
+													changedResources.add(resource);
+												}
+											}
 										}
 									}
 								}
@@ -682,7 +693,18 @@ public class BooksEditor
 
 		// Create the command stack that will notify this editor as commands are executed.
 		//
-		BasicCommandStack commandStack = new BasicCommandStack();
+		BasicCommandStack commandStack =
+			new BasicCommandStack() {
+				@Override
+				public void execute(Command command) {
+					// Cancel live validation before executing a command that will trigger a new round of validation.
+					//
+					if (!(command instanceof AbstractCommand.NonDirtying)) {
+						DiagnosticDecorator.cancel(editingDomain);
+					}
+					super.execute(command);
+				}
+			};
 
 		// Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
 		//
@@ -1023,12 +1045,13 @@ public class BooksEditor
 				selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 				selectionViewer.setUseHashlookup(true);
 
-				selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain, selectionViewer, LibraryEditorPlugin.getPlugin().getDialogSettings())));
 				selectionViewer.setInput(editingDomain.getResourceSet());
 				selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
 				viewerPane.setTitle(editingDomain.getResourceSet());
 
 				new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
+				new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, selectionViewer));
 
 				createContextMenuFor(selectionViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1107,9 +1130,10 @@ public class BooksEditor
 				viewerPane.createControl(getContainer());
 				treeViewer = (TreeViewer)viewerPane.getViewer();
 				treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				treeViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain, treeViewer)));
 
 				new AdapterFactoryTreeEditor(treeViewer.getTree(), adapterFactory);
+				new ColumnViewerInformationControlToolTipSupport(treeViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, treeViewer));
 
 				createContextMenuFor(treeViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1152,7 +1176,9 @@ public class BooksEditor
 
 				tableViewer.setColumnProperties(new String [] {"a", "b"});
 				tableViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				tableViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				tableViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain, tableViewer, LibraryEditorPlugin.getPlugin().getDialogSettings())));
+
+				new ColumnViewerInformationControlToolTipSupport(tableViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, tableViewer));
 
 				createContextMenuFor(tableViewer);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1195,7 +1221,9 @@ public class BooksEditor
 
 				treeViewerWithColumns.setColumnProperties(new String [] {"a", "b"});
 				treeViewerWithColumns.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-				treeViewerWithColumns.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+				treeViewerWithColumns.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain, treeViewerWithColumns, LibraryEditorPlugin.getPlugin().getDialogSettings())));
+
+				new ColumnViewerInformationControlToolTipSupport(treeViewerWithColumns, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, treeViewerWithColumns));
 
 				createContextMenuFor(treeViewerWithColumns);
 				int pageIndex = addPage(viewerPane.getControl());
@@ -1332,8 +1360,10 @@ public class BooksEditor
 					//
 					contentOutlineViewer.setUseHashlookup(true);
 					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+					contentOutlineViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory), new DiagnosticDecorator(editingDomain, contentOutlineViewer, LibraryEditorPlugin.getPlugin().getDialogSettings())));
 					contentOutlineViewer.setInput(editingDomain.getResourceSet());
+
+					new ColumnViewerInformationControlToolTipSupport(contentOutlineViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, contentOutlineViewer));
 
 					// Make sure our popups work.
 					//
@@ -1385,7 +1415,7 @@ public class BooksEditor
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
 		PropertySheetPage propertySheetPage =
-			new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.NONE, null, 0, false) {
+			new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, LibraryEditorPlugin.getPlugin().getDialogSettings(), 0, false) {
 				@Override
 				public void setSelectionToViewer(List<?> selection) {
 					BooksEditor.this.setSelectionToViewer(selection);

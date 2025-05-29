@@ -4,7 +4,7 @@
     modelName="Library" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" testSuiteClass="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="17.0" copyrightFields="false" testsPluginID="edelta.example.migration.library.tests"
-    operationReflection="true" importOrganizing="true">
+    operationReflection="true" importOrganizing="true" decoration="Live">
   <foreignModel>Library.ecore</foreignModel>
   <genPackages prefix="Library" disposableProviderFactory="true" ecorePackage="Library.ecore#/">
     <genClasses ecoreClass="Library.ecore#//Library">
