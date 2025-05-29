@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="books" nsURI="http://edelta/Books/v2" nsPrefix="books">
+  <eClassifiers xsi:type="ecore:EClass" name="BookDatabase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#//Book" containment="true" eOpposite="#//Book/database"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="database" eType="#//BookDatabase"
+        eOpposite="#//BookDatabase/books"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="libraries" upperBound="-1"
+        eType="ecore:EClass Library.ecore#//Library" eOpposite="Library.ecore#//Library/books"/>
+  </eClassifiers>
+</ecore:EPackage>
