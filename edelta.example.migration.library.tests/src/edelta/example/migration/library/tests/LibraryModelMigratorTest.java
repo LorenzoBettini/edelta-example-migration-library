@@ -35,6 +35,12 @@ public class LibraryModelMigratorTest {
 		applyMigrationAndAssertCorrectness();
 	}
 
+	@Test
+	public void testFromV2() throws Exception {
+		EdeltaTestUtils.copyDirectory(INPUTS + "v2", OUTPUT);
+		applyMigrationAndAssertCorrectness();
+	}
+
 	private void applyMigrationAndAssertCorrectness() throws Exception {
 		Collection<Resource> migrated = migrator.execute(OUTPUT);
 		EdeltaTestUtils.assertFilesAreEquals(

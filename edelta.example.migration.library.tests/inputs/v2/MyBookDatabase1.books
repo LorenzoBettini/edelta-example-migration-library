@@ -2,13 +2,13 @@
 <books:BookDatabase
     xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
-    xmlns:books="http://edelta/Books/v3">
+    xmlns:books="http://edelta/Books/v2">
   <books title="first book">
-    <libraryBookItems
-        href="MyLibrary1.library#//@bookItems.0"/>
+    <libraries
+        href="MyLibrary1.library#/"/>
   </books>
   <books title="second book">
-    <libraryBookItems
-        href="MyLibrary2.library#//@bookItems.0"/>
+    <libraries
+        href="MyLibrary2.library#/"/>
   </books>
 </books:BookDatabase>

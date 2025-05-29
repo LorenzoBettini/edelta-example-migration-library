@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 import books.BooksPackage;
 import edelta.FromV1ToV2;
+import edelta.FromV2ToV3;
 import edelta.lib.EdeltaVersionMigrator;
 import library.LibraryPackage;
 
@@ -17,6 +18,7 @@ public class LibraryModelMigrator {
 		edeltaMigrator.loadCurrentEPackages(LibraryPackage.eINSTANCE, BooksPackage.eINSTANCE);
 		// register the Edelta migration code
 		edeltaMigrator.registerMigration(FromV1ToV2::new);
+		edeltaMigrator.registerMigration(FromV2ToV3::new);
 		// load the models to check and migrate
 		edeltaMigrator.addModelFileExtensions(".library", ".books");
 		edeltaMigrator.loadModelsFrom(modelPath);
