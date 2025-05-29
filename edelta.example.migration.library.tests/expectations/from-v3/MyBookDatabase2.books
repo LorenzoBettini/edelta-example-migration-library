@@ -6,6 +6,8 @@
   <books title="another book">
     <libraryBookItems
         href="MyLibrary1.library#//@bookItems.1"/>
+    <libraryBookItems
+        href="MyLibrary1.library#//@bookItems.3"/>
   </books>
   <books title="yet another book">
     <libraryBookItems

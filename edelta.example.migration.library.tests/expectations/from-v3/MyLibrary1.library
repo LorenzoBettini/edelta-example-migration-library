@@ -9,4 +9,10 @@
   <bookItems>
     <book href="MyBookDatabase2.books#//@books.0"/>
   </bookItems>
+  <bookItems>
+    <book href="MyBookDatabase1.books#//@books.0"/>
+  </bookItems>
+  <bookItems>
+    <book href="MyBookDatabase2.books#//@books.0"/>
+  </bookItems>
 </library:Library>

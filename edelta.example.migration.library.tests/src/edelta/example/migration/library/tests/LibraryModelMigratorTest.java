@@ -41,6 +41,16 @@ public class LibraryModelMigratorTest {
 		applyMigrationAndAssertCorrectness();
 	}
 
+	@Test
+	public void testFromV3() throws Exception {
+		// the inputs are different: the first library has several
+		// BookItems referring to the same book, so also the expectations are
+		// different
+		expectationDir = expectationDir + "from-v3/";
+		EdeltaTestUtils.copyDirectory(INPUTS + "v3", OUTPUT);
+		applyMigrationAndAssertCorrectness();
+	}
+
 	private void applyMigrationAndAssertCorrectness() throws Exception {
 		Collection<Resource> migrated = migrator.execute(OUTPUT);
 		EdeltaTestUtils.assertFilesAreEquals(
