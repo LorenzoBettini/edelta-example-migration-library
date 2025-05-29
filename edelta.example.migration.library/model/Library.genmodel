@@ -2,7 +2,8 @@
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/edelta.example.migration.library/src" modelPluginID="edelta.example.migration.library"
     modelName="Library" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0" copyrightFields="false"
+    testsDirectory="" testSuiteClass="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="17.0" copyrightFields="false" testsPluginID="edelta.example.migration.library.tests"
     operationReflection="true" importOrganizing="true">
   <foreignModel>Library.ecore</foreignModel>
   <genPackages prefix="Library" disposableProviderFactory="true" ecorePackage="Library.ecore#/">
