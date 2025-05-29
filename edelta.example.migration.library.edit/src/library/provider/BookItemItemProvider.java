@@ -140,7 +140,7 @@ public class BookItemItemProvider
 		Book referredBook = bookItem.getBook();
 		if (referredBook != null) {
 			String title = referredBook.getTitle();
-			return textGen + " " + title;
+			return String.format("%s %s (%d)", getString("_UI_BookItem_type"), title, bookItem.getNumOfCopies());
 		}
 		return textGen;
 	}
@@ -167,7 +167,7 @@ public class BookItemItemProvider
 
 	/**
 	 * Custom implementation to issue also a content refresh so that the label in the tree
-	 * (based on the referred Book's title) is updated.
+	 * (based on the referred Book's title or number of copies) is updated.
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {
@@ -175,6 +175,7 @@ public class BookItemItemProvider
 
 		switch (notification.getFeatureID(BookItem.class)) {
 			case LibraryPackage.BOOK_ITEM__BOOK:
+			case LibraryPackage.BOOK_ITEM__NUM_OF_COPIES:
 				fireNotifyChanged(
 					new ViewerNotification(
 						notification,
