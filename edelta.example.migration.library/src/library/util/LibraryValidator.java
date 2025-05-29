@@ -2,11 +2,9 @@
  */
 package library.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -126,15 +124,11 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated NOT
 	 */
 	public boolean validateLibrary_noDuplicateBooks(Library library, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		Map<Book, List<BookItem>> bookToItems = new HashMap<>();
 		boolean valid = true;
 
-		for (BookItem item : library.getBookItems()) {
-			Book book = item.getBook();
-			if (book != null) {
-				bookToItems.computeIfAbsent(book, b -> new ArrayList<>()).add(item);
-			}
-		}
+		Map<Book, List<BookItem>> bookToItems = library.getBookItems().stream()
+			.filter(item -> item.getBook() != null)
+			.collect(Collectors.groupingBy(item -> item.getBook()));
 
 		for (Map.Entry<Book, List<BookItem>> entry : bookToItems.entrySet()) {
 			List<BookItem> items = entry.getValue();
