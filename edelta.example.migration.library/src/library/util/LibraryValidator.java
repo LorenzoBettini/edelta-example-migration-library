@@ -2,17 +2,22 @@
  */
 package library.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import library.*;
-
+import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.EObjectValidator;
+
+import books.Book;
+import library.BookItem;
+import library.Library;
+import library.LibraryPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -118,28 +123,35 @@ public class LibraryValidator extends EObjectValidator {
 	 * Validates the noDuplicateBooks constraint of '<em>Library</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public boolean validateLibrary_noDuplicateBooks(Library library, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "noDuplicateBooks", getObjectLabel(library, context) },
-						 new Object[] { library },
-						 context));
+		Map<Book, List<BookItem>> bookToItems = new HashMap<>();
+		boolean valid = true;
+
+		for (BookItem item : library.getBookItems()) {
+			Book book = item.getBook();
+			if (book != null) {
+				bookToItems.computeIfAbsent(book, b -> new ArrayList<>()).add(item);
 			}
-			return false;
 		}
-		return true;
+
+		for (Map.Entry<Book, List<BookItem>> entry : bookToItems.entrySet()) {
+			List<BookItem> items = entry.getValue();
+			if (items.size() > 1) {
+				valid = false;
+				if (diagnostics != null) {
+					diagnostics.add(new BasicDiagnostic(
+						Diagnostic.ERROR,
+						DIAGNOSTIC_SOURCE,
+						0,
+						"Duplicate BookItem refer to Book '" + entry.getKey().getTitle() + "'",
+						items.toArray()));
+				}
+			}
+		}
+
+		return valid;
 	}
 
 	/**
