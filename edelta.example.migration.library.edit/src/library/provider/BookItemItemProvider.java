@@ -6,6 +6,7 @@ package library.provider;
 import java.util.Collection;
 import java.util.List;
 
+import library.BookItem;
 import library.LibraryPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -21,6 +22,8 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.emf.edit.provider.ViewerNotification;
+import books.Book;
 
 /**
  * This is the item provider adapter for a {@link library.BookItem} object.
@@ -101,9 +104,20 @@ public class BookItemItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getTextGen(Object object) {
+		return getString("_UI_BookItem_type");
+	}
+
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_BookItem_type");
+		String textGen = getTextGen(object);
+		BookItem bookItem = (BookItem) object;
+		Book referredBook = bookItem.getBook();
+		if (referredBook != null) {
+			String title = referredBook.getTitle();
+			return textGen + " " + title;
+		}
+		return textGen;
 	}
 
 
@@ -114,9 +128,35 @@ public class BookItemItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public void notifyChangedGen(Notification notification) {
+		updateChildren(notification);
+
+		switch (notification.getFeatureID(BookItem.class)) {
+			case LibraryPackage.BOOK_ITEM__BOOK:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
+		super.notifyChanged(notification);
+	}
+
+	/**
+	 * Custom implementation to issue also a content refresh so that the label in the tree
+	 * (based on the referred Book's title) is updated.
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(BookItem.class)) {
+			case LibraryPackage.BOOK_ITEM__BOOK:
+				fireNotifyChanged(
+					new ViewerNotification(
+						notification,
+						notification.getNotifier(),
+						true, // content refresh
+						true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
