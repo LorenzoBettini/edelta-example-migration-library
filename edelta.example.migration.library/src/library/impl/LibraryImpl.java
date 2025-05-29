@@ -2,11 +2,9 @@
  */
 package library.impl;
 
-import books.Book;
-
-import books.BooksPackage;
 import java.util.Collection;
 
+import library.BookItem;
 import library.Library;
 import library.LibraryPackage;
 
@@ -17,7 +15,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -28,22 +26,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link library.impl.LibraryImpl#getBooks <em>Books</em>}</li>
+ *   <li>{@link library.impl.LibraryImpl#getBookItems <em>Book Items</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class LibraryImpl extends MinimalEObjectImpl.Container implements Library {
 	/**
-	 * The cached value of the '{@link #getBooks() <em>Books</em>}' reference list.
+	 * The cached value of the '{@link #getBookItems() <em>Book Items</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBooks()
+	 * @see #getBookItems()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Book> books;
-
+	protected EList<BookItem> bookItems;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -69,11 +66,11 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public EList<Book> getBooks() {
-		if (books == null) {
-			books = new EObjectWithInverseResolvingEList.ManyInverse<Book>(Book.class, this, LibraryPackage.LIBRARY__BOOKS, BooksPackage.BOOK__LIBRARIES);
+	public EList<BookItem> getBookItems() {
+		if (bookItems == null) {
+			bookItems = new EObjectContainmentWithInverseEList<BookItem>(BookItem.class, this, LibraryPackage.LIBRARY__BOOK_ITEMS, LibraryPackage.BOOK_ITEM__LIBRARY);
 		}
-		return books;
+		return bookItems;
 	}
 
 	/**
@@ -85,8 +82,8 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getBooks()).basicAdd(otherEnd, msgs);
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getBookItems()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -99,8 +96,8 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				return ((InternalEList<?>)getBooks()).basicRemove(otherEnd, msgs);
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				return ((InternalEList<?>)getBookItems()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -113,8 +110,8 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				return getBooks();
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				return getBookItems();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,9 +125,9 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				getBooks().clear();
-				getBooks().addAll((Collection<? extends Book>)newValue);
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				getBookItems().clear();
+				getBookItems().addAll((Collection<? extends BookItem>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -144,8 +141,8 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				getBooks().clear();
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				getBookItems().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -159,8 +156,8 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryPackage.LIBRARY__BOOKS:
-				return books != null && !books.isEmpty();
+			case LibraryPackage.LIBRARY__BOOK_ITEMS:
+				return bookItems != null && !bookItems.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -37,7 +37,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Library/v2";
+	String eNS_URI = "http://edelta/Library/v3";
 
 	/**
 	 * The package namespace name.
@@ -66,13 +66,13 @@ public interface LibraryPackage extends EPackage {
 	int LIBRARY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Books</b></em>' reference list.
+	 * The feature id for the '<em><b>Book Items</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY__BOOKS = 0;
+	int LIBRARY__BOOK_ITEMS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Library</em>' class.
@@ -94,6 +94,53 @@ public interface LibraryPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link library.impl.BookItemImpl <em>Book Item</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see library.impl.BookItemImpl
+	 * @see library.impl.LibraryPackageImpl#getBookItem()
+	 * @generated
+	 */
+	int BOOK_ITEM = 1;
+
+	/**
+	 * The feature id for the '<em><b>Book</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK_ITEM__BOOK = 0;
+
+	/**
+	 * The feature id for the '<em><b>Library</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK_ITEM__LIBRARY = 1;
+
+	/**
+	 * The number of structural features of the '<em>Book Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK_ITEM_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Book Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOK_ITEM_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link library.Library <em>Library</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,15 +151,47 @@ public interface LibraryPackage extends EPackage {
 	EClass getLibrary();
 
 	/**
-	 * Returns the meta object for the reference list '{@link library.Library#getBooks <em>Books</em>}'.
+	 * Returns the meta object for the containment reference list '{@link library.Library#getBookItems <em>Book Items</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Books</em>'.
-	 * @see library.Library#getBooks()
+	 * @return the meta object for the containment reference list '<em>Book Items</em>'.
+	 * @see library.Library#getBookItems()
 	 * @see #getLibrary()
 	 * @generated
 	 */
-	EReference getLibrary_Books();
+	EReference getLibrary_BookItems();
+
+	/**
+	 * Returns the meta object for class '{@link library.BookItem <em>Book Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Book Item</em>'.
+	 * @see library.BookItem
+	 * @generated
+	 */
+	EClass getBookItem();
+
+	/**
+	 * Returns the meta object for the reference '{@link library.BookItem#getBook <em>Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Book</em>'.
+	 * @see library.BookItem#getBook()
+	 * @see #getBookItem()
+	 * @generated
+	 */
+	EReference getBookItem_Book();
+
+	/**
+	 * Returns the meta object for the container reference '{@link library.BookItem#getLibrary <em>Library</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Library</em>'.
+	 * @see library.BookItem#getLibrary()
+	 * @see #getBookItem()
+	 * @generated
+	 */
+	EReference getBookItem_Library();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -148,12 +227,38 @@ public interface LibraryPackage extends EPackage {
 		EClass LIBRARY = eINSTANCE.getLibrary();
 
 		/**
-		 * The meta object literal for the '<em><b>Books</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Book Items</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LIBRARY__BOOKS = eINSTANCE.getLibrary_Books();
+		EReference LIBRARY__BOOK_ITEMS = eINSTANCE.getLibrary_BookItems();
+
+		/**
+		 * The meta object literal for the '{@link library.impl.BookItemImpl <em>Book Item</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see library.impl.BookItemImpl
+		 * @see library.impl.LibraryPackageImpl#getBookItem()
+		 * @generated
+		 */
+		EClass BOOK_ITEM = eINSTANCE.getBookItem();
+
+		/**
+		 * The meta object literal for the '<em><b>Book</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOK_ITEM__BOOK = eINSTANCE.getBookItem_Book();
+
+		/**
+		 * The meta object literal for the '<em><b>Library</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOOK_ITEM__LIBRARY = eINSTANCE.getBookItem_Library();
 
 	}
 

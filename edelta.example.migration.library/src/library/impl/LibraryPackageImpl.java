@@ -6,6 +6,7 @@ import books.BooksPackage;
 
 import books.impl.BooksPackageImpl;
 
+import library.BookItem;
 import library.Library;
 import library.LibraryFactory;
 import library.LibraryPackage;
@@ -29,6 +30,13 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	private EClass libraryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass bookItemEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -112,8 +120,38 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getLibrary_Books() {
+	public EReference getLibrary_BookItems() {
 		return (EReference)libraryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getBookItem() {
+		return bookItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBookItem_Book() {
+		return (EReference)bookItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBookItem_Library() {
+		return (EReference)bookItemEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -146,7 +184,11 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 
 		// Create classes and their features
 		libraryEClass = createEClass(LIBRARY);
-		createEReference(libraryEClass, LIBRARY__BOOKS);
+		createEReference(libraryEClass, LIBRARY__BOOK_ITEMS);
+
+		bookItemEClass = createEClass(BOOK_ITEM);
+		createEReference(bookItemEClass, BOOK_ITEM__BOOK);
+		createEReference(bookItemEClass, BOOK_ITEM__LIBRARY);
 	}
 
 	/**
@@ -183,7 +225,11 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(libraryEClass, Library.class, "Library", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getLibrary_Books(), theBooksPackage.getBook(), theBooksPackage.getBook_Libraries(), "books", null, 0, -1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLibrary_BookItems(), this.getBookItem(), this.getBookItem_Library(), "bookItems", null, 0, -1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(bookItemEClass, BookItem.class, "BookItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBookItem_Book(), theBooksPackage.getBook(), theBooksPackage.getBook_LibraryBookItems(), "book", null, 1, 1, BookItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBookItem_Library(), this.getLibrary(), this.getLibrary_BookItems(), "library", null, 1, 1, BookItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

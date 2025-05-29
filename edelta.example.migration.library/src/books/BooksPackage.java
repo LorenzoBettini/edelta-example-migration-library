@@ -38,7 +38,7 @@ public interface BooksPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://edelta/Books/v2";
+	String eNS_URI = "http://edelta/Books/v3";
 
 	/**
 	 * The package namespace name.
@@ -122,13 +122,13 @@ public interface BooksPackage extends EPackage {
 	int BOOK__DATABASE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Libraries</b></em>' reference list.
+	 * The feature id for the '<em><b>Library Book Items</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOK__LIBRARIES = 2;
+	int BOOK__LIBRARY_BOOK_ITEMS = 2;
 
 	/**
 	 * The number of structural features of the '<em>Book</em>' class.
@@ -203,15 +203,15 @@ public interface BooksPackage extends EPackage {
 	EReference getBook_Database();
 
 	/**
-	 * Returns the meta object for the reference list '{@link books.Book#getLibraries <em>Libraries</em>}'.
+	 * Returns the meta object for the reference list '{@link books.Book#getLibraryBookItems <em>Library Book Items</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Libraries</em>'.
-	 * @see books.Book#getLibraries()
+	 * @return the meta object for the reference list '<em>Library Book Items</em>'.
+	 * @see books.Book#getLibraryBookItems()
 	 * @see #getBook()
 	 * @generated
 	 */
-	EReference getBook_Libraries();
+	EReference getBook_LibraryBookItems();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -281,12 +281,12 @@ public interface BooksPackage extends EPackage {
 		EReference BOOK__DATABASE = eINSTANCE.getBook_Database();
 
 		/**
-		 * The meta object literal for the '<em><b>Libraries</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Library Book Items</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BOOK__LIBRARIES = eINSTANCE.getBook_Libraries();
+		EReference BOOK__LIBRARY_BOOK_ITEMS = eINSTANCE.getBook_LibraryBookItems();
 
 	}
 

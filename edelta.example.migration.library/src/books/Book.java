@@ -2,7 +2,7 @@
  */
 package books;
 
-import library.Library;
+import library.BookItem;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link books.Book#getTitle <em>Title</em>}</li>
  *   <li>{@link books.Book#getDatabase <em>Database</em>}</li>
- *   <li>{@link books.Book#getLibraries <em>Libraries</em>}</li>
+ *   <li>{@link books.Book#getLibraryBookItems <em>Library Book Items</em>}</li>
  * </ul>
  *
  * @see books.BooksPackage#getBook()
@@ -72,17 +72,17 @@ public interface Book extends EObject {
 	void setDatabase(BookDatabase value);
 
 	/**
-	 * Returns the value of the '<em><b>Libraries</b></em>' reference list.
-	 * The list contents are of type {@link library.Library}.
-	 * It is bidirectional and its opposite is '{@link library.Library#getBooks <em>Books</em>}'.
+	 * Returns the value of the '<em><b>Library Book Items</b></em>' reference list.
+	 * The list contents are of type {@link library.BookItem}.
+	 * It is bidirectional and its opposite is '{@link library.BookItem#getBook <em>Book</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Libraries</em>' reference list.
-	 * @see books.BooksPackage#getBook_Libraries()
-	 * @see library.Library#getBooks
-	 * @model opposite="books"
+	 * @return the value of the '<em>Library Book Items</em>' reference list.
+	 * @see books.BooksPackage#getBook_LibraryBookItems()
+	 * @see library.BookItem#getBook
+	 * @model opposite="book"
 	 * @generated
 	 */
-	EList<Library> getLibraries();
+	EList<BookItem> getLibraryBookItems();
 
 } // Book

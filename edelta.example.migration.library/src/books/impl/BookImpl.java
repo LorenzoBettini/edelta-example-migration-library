@@ -7,7 +7,7 @@ import books.BookDatabase;
 import books.BooksPackage;
 
 import java.util.Collection;
-import library.Library;
+import library.BookItem;
 import library.LibraryPackage;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link books.impl.BookImpl#getTitle <em>Title</em>}</li>
  *   <li>{@link books.impl.BookImpl#getDatabase <em>Database</em>}</li>
- *   <li>{@link books.impl.BookImpl#getLibraries <em>Libraries</em>}</li>
+ *   <li>{@link books.impl.BookImpl#getLibraryBookItems <em>Library Book Items</em>}</li>
  * </ul>
  *
  * @generated
@@ -59,14 +59,14 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 	protected String title = TITLE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLibraries() <em>Libraries</em>}' reference list.
+	 * The cached value of the '{@link #getLibraryBookItems() <em>Library Book Items</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLibraries()
+	 * @see #getLibraryBookItems()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Library> libraries;
+	protected EList<BookItem> libraryBookItems;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -159,11 +159,11 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 	 * @generated
 	 */
 	@Override
-	public EList<Library> getLibraries() {
-		if (libraries == null) {
-			libraries = new EObjectWithInverseResolvingEList.ManyInverse<Library>(Library.class, this, BooksPackage.BOOK__LIBRARIES, LibraryPackage.LIBRARY__BOOKS);
+	public EList<BookItem> getLibraryBookItems() {
+		if (libraryBookItems == null) {
+			libraryBookItems = new EObjectWithInverseResolvingEList<BookItem>(BookItem.class, this, BooksPackage.BOOK__LIBRARY_BOOK_ITEMS, LibraryPackage.BOOK_ITEM__BOOK);
 		}
-		return libraries;
+		return libraryBookItems;
 	}
 
 	/**
@@ -179,8 +179,8 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetDatabase((BookDatabase)otherEnd, msgs);
-			case BooksPackage.BOOK__LIBRARIES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLibraries()).basicAdd(otherEnd, msgs);
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLibraryBookItems()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -195,8 +195,8 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 		switch (featureID) {
 			case BooksPackage.BOOK__DATABASE:
 				return basicSetDatabase(null, msgs);
-			case BooksPackage.BOOK__LIBRARIES:
-				return ((InternalEList<?>)getLibraries()).basicRemove(otherEnd, msgs);
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				return ((InternalEList<?>)getLibraryBookItems()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -227,8 +227,8 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 				return getTitle();
 			case BooksPackage.BOOK__DATABASE:
 				return getDatabase();
-			case BooksPackage.BOOK__LIBRARIES:
-				return getLibraries();
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				return getLibraryBookItems();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -248,9 +248,9 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 			case BooksPackage.BOOK__DATABASE:
 				setDatabase((BookDatabase)newValue);
 				return;
-			case BooksPackage.BOOK__LIBRARIES:
-				getLibraries().clear();
-				getLibraries().addAll((Collection<? extends Library>)newValue);
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				getLibraryBookItems().clear();
+				getLibraryBookItems().addAll((Collection<? extends BookItem>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -270,8 +270,8 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 			case BooksPackage.BOOK__DATABASE:
 				setDatabase((BookDatabase)null);
 				return;
-			case BooksPackage.BOOK__LIBRARIES:
-				getLibraries().clear();
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				getLibraryBookItems().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -289,8 +289,8 @@ public class BookImpl extends MinimalEObjectImpl.Container implements Book {
 				return TITLE_EDEFAULT == null ? title != null : !TITLE_EDEFAULT.equals(title);
 			case BooksPackage.BOOK__DATABASE:
 				return getDatabase() != null;
-			case BooksPackage.BOOK__LIBRARIES:
-				return libraries != null && !libraries.isEmpty();
+			case BooksPackage.BOOK__LIBRARY_BOOK_ITEMS:
+				return libraryBookItems != null && !libraryBookItems.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

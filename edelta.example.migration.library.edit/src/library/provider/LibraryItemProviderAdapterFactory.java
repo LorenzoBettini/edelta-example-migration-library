@@ -95,6 +95,29 @@ public class LibraryItemProviderAdapterFactory extends LibraryAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link library.BookItem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BookItemItemProvider bookItemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link library.BookItem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBookItemAdapter() {
+		if (bookItemItemProvider == null) {
+			bookItemItemProvider = new BookItemItemProvider(this);
+		}
+
+		return bookItemItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -200,6 +223,7 @@ public class LibraryItemProviderAdapterFactory extends LibraryAdapterFactory imp
 	@Override
 	public void dispose() {
 		if (libraryItemProvider != null) libraryItemProvider.dispose();
+		if (bookItemItemProvider != null) bookItemItemProvider.dispose();
 	}
 
 }

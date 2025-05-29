@@ -31,6 +31,15 @@ public interface LibraryFactory extends EFactory {
 	Library createLibrary();
 
 	/**
+	 * Returns a new object of class '<em>Book Item</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Book Item</em>'.
+	 * @generated
+	 */
+	BookItem createBookItem();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -63,7 +63,7 @@ public class BookItemProvider
 			super.getPropertyDescriptors(object);
 
 			addTitlePropertyDescriptor(object);
-			addLibrariesPropertyDescriptor(object);
+			addLibraryBookItemsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,19 +91,19 @@ public class BookItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Libraries feature.
+	 * This adds a property descriptor for the Library Book Items feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLibrariesPropertyDescriptor(Object object) {
+	protected void addLibraryBookItemsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Book_libraries_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Book_libraries_feature", "_UI_Book_type"),
-				 BooksPackage.Literals.BOOK__LIBRARIES,
+				 getString("_UI_Book_libraryBookItems_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Book_libraryBookItems_feature", "_UI_Book_type"),
+				 BooksPackage.Literals.BOOK__LIBRARY_BOOK_ITEMS,
 				 true,
 				 false,
 				 true,

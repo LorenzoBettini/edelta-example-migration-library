@@ -2,8 +2,6 @@
  */
 package library;
 
-import books.Book;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -17,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link library.Library#getBooks <em>Books</em>}</li>
+ *   <li>{@link library.Library#getBookItems <em>Book Items</em>}</li>
  * </ul>
  *
  * @see library.LibraryPackage#getLibrary()
@@ -26,17 +24,17 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Library extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Books</b></em>' reference list.
-	 * The list contents are of type {@link books.Book}.
-	 * It is bidirectional and its opposite is '{@link books.Book#getLibraries <em>Libraries</em>}'.
+	 * Returns the value of the '<em><b>Book Items</b></em>' containment reference list.
+	 * The list contents are of type {@link library.BookItem}.
+	 * It is bidirectional and its opposite is '{@link library.BookItem#getLibrary <em>Library</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Books</em>' reference list.
-	 * @see library.LibraryPackage#getLibrary_Books()
-	 * @see books.Book#getLibraries
-	 * @model opposite="libraries"
+	 * @return the value of the '<em>Book Items</em>' containment reference list.
+	 * @see library.LibraryPackage#getLibrary_BookItems()
+	 * @see library.BookItem#getLibrary
+	 * @model opposite="library" containment="true"
 	 * @generated
 	 */
-	EList<Book> getBooks();
+	EList<BookItem> getBookItems();
 
 } // Library
