@@ -7,7 +7,11 @@
   <foreignModel>Library.ecore</foreignModel>
   <genPackages prefix="Library" disposableProviderFactory="true" ecorePackage="Library.ecore#/">
     <genClasses ecoreClass="Library.ecore#//Library">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Library.ecore#//Library/books"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Library.ecore#//Library/bookItems"/>
+    </genClasses>
+    <genClasses ecoreClass="Library.ecore#//BookItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Library.ecore#//BookItem/book"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Library.ecore#//BookItem/library"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Books" disposableProviderFactory="true" ecorePackage="Books.ecore#/">
@@ -17,7 +21,7 @@
     <genClasses ecoreClass="Books.ecore#//Book">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Books.ecore#//Book/title"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Books.ecore#//Book/database"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Books.ecore#//Book/libraries"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Books.ecore#//Book/libraryBookItems"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

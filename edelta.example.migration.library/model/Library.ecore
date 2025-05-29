@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="library" nsURI="http://edelta/Library/v2" nsPrefix="library">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="library" nsURI="http://edelta/Library/v3" nsPrefix="library">
   <eClassifiers xsi:type="ecore:EClass" name="Library">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
-        eType="ecore:EClass Books.ecore#//Book" eOpposite="Books.ecore#//Book/libraries"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bookItems" upperBound="-1"
+        eType="#//BookItem" containment="true" eOpposite="#//BookItem/library"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BookItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1" eType="ecore:EClass Books.ecore#//Book"
+        eOpposite="Books.ecore#//Book/libraryBookItems"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" lowerBound="1"
+        eType="#//Library" eOpposite="#//Library/bookItems"/>
   </eClassifiers>
 </ecore:EPackage>
