@@ -56,8 +56,8 @@ public class FromV3ToV4 extends EdeltaDefaultRuntime {
   @Override
   public List<String> getMigratedEcorePaths() {
     return List.of(
-      "/v3/Library.ecore",
-      "/v3/Books.ecore"
+      "/library/v3/Library.ecore",
+      "/library/v3/Books.ecore"
     );
   }
 
@@ -65,9 +65,9 @@ public class FromV3ToV4 extends EdeltaDefaultRuntime {
   public static void main(final String[] args) throws Exception {
     var engine = new EdeltaEngine(FromV3ToV4::new);
     engine.loadEcoreFile("Library.ecore",
-      FromV3ToV4.class.getResourceAsStream("/v3/Library.ecore"));
+      FromV3ToV4.class.getResourceAsStream("/library/v3/Library.ecore"));
     engine.loadEcoreFile("Books.ecore",
-      FromV3ToV4.class.getResourceAsStream("/v3/Books.ecore"));
+      FromV3ToV4.class.getResourceAsStream("/library/v3/Books.ecore"));
     engine.execute();
     engine.save("modified");
   }
