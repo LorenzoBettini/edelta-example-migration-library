@@ -11,4 +11,8 @@
 	<artifactId>edelta.example.migration.library.migrator.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+	<properties>
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
 </project>
