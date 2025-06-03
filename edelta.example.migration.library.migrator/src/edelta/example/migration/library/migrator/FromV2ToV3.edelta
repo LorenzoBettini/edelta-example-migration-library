@@ -1,5 +1,7 @@
 import edelta.refactorings.lib.EdeltaRefactorings
 
+package edelta.exaple.migration.library.migrator
+
 migrate "http://edelta/Library/v2" to "http://edelta/Library/v3"
 migrate "http://edelta/Books/v2" to "http://edelta/Books/v3"
 

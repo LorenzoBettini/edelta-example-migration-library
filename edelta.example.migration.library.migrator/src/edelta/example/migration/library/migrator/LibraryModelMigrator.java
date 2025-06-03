@@ -5,9 +5,9 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import books.BooksPackage;
-import edelta.FromV1ToV2;
-import edelta.FromV2ToV3;
-import edelta.FromV3ToV4;
+import edelta.exaple.migration.library.migrator.FromV1ToV2;
+import edelta.exaple.migration.library.migrator.FromV2ToV3;
+import edelta.exaple.migration.library.migrator.FromV3ToV4;
 import edelta.lib.EdeltaVersionMigrator;
 import library.LibraryPackage;
 

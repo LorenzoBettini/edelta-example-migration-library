@@ -1,4 +1,4 @@
-package edelta;
+package edelta.exaple.migration.library.migrator;
 
 import edelta.lib.EdeltaDefaultRuntime;
 import edelta.lib.EdeltaEngine;

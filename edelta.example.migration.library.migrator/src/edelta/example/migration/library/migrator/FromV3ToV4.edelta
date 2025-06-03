@@ -1,3 +1,5 @@
+package edelta.exaple.migration.library.migrator
+
 metamodel "ecore"
 
 migrate "http://edelta/Library/v3" to "http://edelta/Library/v4"

@@ -1,3 +1,5 @@
+package edelta.exaple.migration.library.migrator
+
 migrate "http://edelta/Library/v1" to "http://edelta/Library/v2"
 migrate "http://edelta/Books/v1" to "http://edelta/Books/v2"
 
