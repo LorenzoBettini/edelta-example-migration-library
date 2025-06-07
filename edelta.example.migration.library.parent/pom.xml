@@ -9,7 +9,7 @@
 
 	<name>Edelta Migration Example Library</name>
 	<url>https://github.com/LorenzoBettini/edelta-example-migration-library</url>
-	<description>Edelta Migration Example Personlist.</description>
+	<description>Edelta Migration Example Library.</description>
 
 	<licenses>
 		<license>
@@ -52,7 +52,6 @@
 		<nexus-staging-url>https://s01.oss.sonatype.org/</nexus-staging-url>
 		<maven-deploy-plugin-version>3.1.4</maven-deploy-plugin-version>
 		<maven-install-plugin-version>3.1.4</maven-install-plugin-version>
-		<nexus-staging-maven-plugin-version>1.7.0</nexus-staging-maven-plugin-version>
 		<maven-javadoc-plugin-version>3.11.2</maven-javadoc-plugin-version>
 		<maven-source-plugin-version>3.3.1</maven-source-plugin-version>
 		<maven-gpg-plugin-version>3.2.7</maven-gpg-plugin-version>
@@ -157,9 +156,30 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>${nexus-staging-maven-plugin-version}</version>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.7.0</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<excludeArtifacts>
+								<excludeArtifact>
+									edelta.example.migration.library.edit
+								</excludeArtifact>
+								<excludeArtifact>
+									edelta.example.migration.library.editor
+								</excludeArtifact>
+								<excludeArtifact>
+									edelta.example.migration.library.tests
+								</excludeArtifact>
+								<excludeArtifact>
+									edelta.example.migration.library.ui.tests
+								</excludeArtifact>
+								<excludeArtifact>
+									edelta.example.migration.library.migrator.ui
+								</excludeArtifact>
+							</excludeArtifacts>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -218,14 +238,4 @@
 		</profile>
 	</profiles>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 </project>
