@@ -36,7 +36,7 @@ public class LibraryMigratorHandler implements IStartup {
 	}
 
 	private void processProjects(IProject... projects) {
-		List<String> migratedResources = new ArrayList<String>();
+		List<String> migratedResources = new ArrayList<>();
 		for (IProject project : projects) {
 			if (project.isOpen()) {
 				LibraryEditorPlugin.INSTANCE.log("Processing project: " + project.getName());
