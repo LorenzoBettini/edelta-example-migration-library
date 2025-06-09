@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tycho-version>4.0.12</tycho-version>
-		<edelta-version>3.8.7</edelta-version>
+		<edelta-version>3.8.8</edelta-version>
 		<xtext-version>2.38.0</xtext-version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
