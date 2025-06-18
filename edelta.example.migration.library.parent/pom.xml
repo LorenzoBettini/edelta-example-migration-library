@@ -146,7 +146,7 @@
 	<profiles>
 		<!-- For deployment:
 		mvn -U -f edelta.example.migration.library.parent deploy -DskipTests -Psonatype-oss-release
-		find ~/.m2/repository -name "*library*" -exec rm -rf {} \+
+		find ~/.m2/repository/ -name "*library*" -exec rm -rf {} \+
 		-->
 		<profile>
 			<id>sonatype-oss-release</id>
