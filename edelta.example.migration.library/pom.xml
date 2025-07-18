@@ -11,4 +11,6 @@
 	<artifactId>edelta.example.migration.library</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+	<name>Edelta Migration Example Library Model</name>
+	<description>Edelta Migration Example Library Model</description>
 </project>
