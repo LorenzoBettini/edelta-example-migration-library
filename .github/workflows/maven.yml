@@ -33,19 +33,19 @@ jobs:
         run: mvn -f edelta.example.migration.library.parent -U verify
 
     - name: Archive Test Results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: ${{ failure() || cancelled() }}
       with:
         name: test-results-${{ runner.os }}
         path: '**/*.tests/target/surefire-reports'
     - name: Archive UI Tests Screenshots
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: ${{ failure() || cancelled() }}
       with:
         name: screenshots-${{ runner.os }}
         path: '**/*.tests/screenshots'
     - name: Archive Logs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: ${{ failure() || cancelled() }}
       with:
         name: logs-${{ runner.os }}
