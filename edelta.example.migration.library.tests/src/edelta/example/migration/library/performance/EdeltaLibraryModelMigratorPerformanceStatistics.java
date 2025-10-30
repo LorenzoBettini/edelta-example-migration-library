@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +30,8 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 	 */
 	static final class Config {
 		// Base template location (relative to the tests module basedir)
+		// This is not used directly in the current implementation, but kept for reference:
+		// all inputs are generated programmatically, taking inspiration from these templates.
 		static final String TEMPLATES_DIR = "inputs/v1";
 
 		// Where to generate inputs (cleaned before each run)
@@ -69,7 +70,6 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 
 		void runAll() throws Exception {
 			System.out.println("=== Edelta LibraryModelMigrator Performance ===");
-			System.out.println("Base templates: " + Config.TEMPLATES_DIR);
 			System.out.println("Generated inputs under: " + Config.PERF_BASE_DIR.toAbsolutePath());
 
 			warmUp();
@@ -330,21 +330,7 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		}
 
 		private static void cleanDirectory(Path dir) throws IOException {
-			// Prefer the Edelta test utils if available; otherwise, do a simple recursive delete
-			try {
-				EdeltaTestUtils.cleanDirectoryRecursive(dir.toString());
-				return;
-			} catch (Throwable t) {
-				// fallback
-			}
-			if (Files.exists(dir)) {
-				Files.walk(dir)
-					.sorted(Comparator.reverseOrder())
-					.forEach(p -> {
-						try { Files.deleteIfExists(p); } catch (Exception ignore) {}
-					});
-			}
-			Files.createDirectories(dir);
+			EdeltaTestUtils.cleanDirectoryRecursive(dir.toString());
 		}
 	}
 }
