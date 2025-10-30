@@ -1,5 +1,8 @@
 package edelta.example.migration.library.example;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import edelta.example.migration.library.migrator.LibraryModelMigrator;
 import edelta.testutils.EdeltaTestUtils;
 
@@ -18,10 +21,13 @@ public class LibraryModelMigratorExample {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
+		// Silence INFO logging for this execution only, keep WARNING and ERROR
+		Logger.getRootLogger().setLevel(Level.WARN);
 		// Accept base directory as first argument, default to current directory
 		String baseDir = args.length > 0 ? args[0] : ".";
 		String inputDir = baseDir + "/inputs/v1";
 		String outputDir = baseDir + "/output/";
+		System.out.println("Migrating models from " + inputDir + " to " + outputDir);
 		LibraryModelMigrator migrator = new LibraryModelMigrator();
 		// Copy input files to output directory
 		EdeltaTestUtils.cleanDirectoryRecursive(outputDir);
