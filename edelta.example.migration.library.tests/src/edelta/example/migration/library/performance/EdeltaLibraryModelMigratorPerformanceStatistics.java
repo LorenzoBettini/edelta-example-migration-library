@@ -7,10 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edelta.example.migration.library.migrator.LibraryModelMigrator;
 import edelta.testutils.EdeltaTestUtils;
@@ -44,11 +48,11 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		static final int FILES_MAX = 1024;
 		static final int FILES_FACTOR = 2;
 
-		// Size series: total number of Book elements across the two .books files, doubling up to 8192
-		// Each .books file will contain half of TOTAL_BOOKS (so min per DB is 2)
-		static final int SIZE_TOTAL_BOOKS_START = 4;   // matches the templates: 2+2 books
-		static final int SIZE_TOTAL_BOOKS_MAX = 8192;
-		static final int SIZE_FACTOR = 2;
+		// Size series: duplication factor for template content, doubling up to max
+		// Factor 1 = original templates, Factor 2 = duplicate all elements once, etc.
+		static final int SIZE_FACTOR_START = 1;   // original template size
+		static final int SIZE_FACTOR_MAX = 2048;  // 2048x duplication gives ~8192 elements
+		static final int SIZE_MULTIPLY = 2;
 
 		// Fixed names used by the templates
 		static final String DB1_BASE = "MyBookDatabase1";
@@ -79,8 +83,8 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			printResults("files", filesResults);
 
 			System.out.println();
-			System.out.println("-- Trend: Model size (total Book elements) vs time --");
-			printResults("totalBooks", sizeResults);
+			System.out.println("-- Trend: Model size (total elements) vs time --");
+			printResults("totalElements", sizeResults);
 		}
 
 		private void warmUp() throws Exception {
@@ -89,8 +93,8 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			var warmDir = Config.PERF_BASE_DIR.resolve("warmup");
 			for (int i = 0; i < Config.WARMUP_ITERATIONS; i++) {
 				cleanDirectory(warmDir);
-				// 1 group -> 4 files, minimal size (2 books per DB)
-				generateFileGroup(warmDir, "warm", 1, /*booksPerDB*/2);
+				// Use original template size (factor=1) for warmup
+				duplicateTemplatesWithFactor(warmDir, 1);
 				long t0 = System.nanoTime();
 				migrator.execute(warmDir.toString());
 				long elapsed = System.nanoTime() - t0;
@@ -133,24 +137,25 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			System.out.println("Measuring impact of model size (constant number of files = 4)...");
 			var seriesDir = Config.PERF_BASE_DIR.resolve("size");
 			var results = new LinkedHashMap<Integer, Long>();
-			for (int totalBooks = Config.SIZE_TOTAL_BOOKS_START;
-				 totalBooks <= Config.SIZE_TOTAL_BOOKS_MAX;
-				 totalBooks *= Config.SIZE_FACTOR) {
-				int perDb = Math.max(2, totalBooks / 2); // split evenly across the two DBs
+			for (int factor = Config.SIZE_FACTOR_START;
+				 factor <= Config.SIZE_FACTOR_MAX;
+				 factor *= Config.SIZE_MULTIPLY) {
 				cleanDirectory(seriesDir);
-				generateFixedFourFiles(seriesDir, perDb);
+				duplicateTemplatesWithFactor(seriesDir, factor);
 				long best = Long.MAX_VALUE;
 				for (int it = 0; it < Config.ITERATIONS_PER_POINT; it++) {
 					// Re-generate to ensure models are at v1 for each iteration
 					cleanDirectory(seriesDir);
-					generateFixedFourFiles(seriesDir, perDb);
+					duplicateTemplatesWithFactor(seriesDir, factor);
 					long t0 = System.nanoTime();
 					migrator.execute(seriesDir.toString());
 					long elapsed = System.nanoTime() - t0;
 					best = Math.min(best, elapsed);
 				}
-				results.put(totalBooks, best);
-				System.out.println("  totalBooks=" + totalBooks + " (per DB=" + perDb + ") -> " + formatNanos(best));
+				// Count actual total elements for reporting
+				int totalElements = countTotalElements(seriesDir);
+				results.put(totalElements, best);
+				System.out.println("  factor=" + factor + ", totalElements=" + totalElements + " -> " + formatNanos(best));
 			}
 			return results;
 		}
@@ -166,16 +171,134 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			return String.format(Locale.ROOT, "%.3f s", ms / 1000.0);
 		}
 
-		private void generateFixedFourFiles(Path dir, int booksPerDB) throws IOException {
-			// Use the original names (no suffix) while ensuring references match
-			writeBooks(dir.resolve(Config.DB1_BASE + ".books"), booksPerDB);
-			writeBooks(dir.resolve(Config.DB2_BASE + ".books"), booksPerDB);
-			writeLibrary(dir.resolve(Config.LIB1_BASE + ".library"),
-				Config.DB1_BASE + ".books", 0,
-				Config.DB2_BASE + ".books", 0);
-			writeLibrary(dir.resolve(Config.LIB2_BASE + ".library"),
-				Config.DB1_BASE + ".books", 1,
-				Config.DB2_BASE + ".books", 1);
+		/**
+		 * Duplicate template files by the given factor. Factor 1 = original size.
+		 * This duplicates all elements in both .books and .library files.
+		 */
+		private void duplicateTemplatesWithFactor(Path dir, int factor) throws IOException {
+			Path templatesDir = Paths.get(Config.TEMPLATES_DIR);
+			
+			// Duplicate .books files
+			duplicateBooksFile(templatesDir.resolve(Config.DB1_BASE + ".books"),
+					dir.resolve(Config.DB1_BASE + ".books"), factor);
+			duplicateBooksFile(templatesDir.resolve(Config.DB2_BASE + ".books"),
+					dir.resolve(Config.DB2_BASE + ".books"), factor);
+			
+			// Duplicate .library files
+			duplicateLibraryFile(templatesDir.resolve(Config.LIB1_BASE + ".library"),
+					dir.resolve(Config.LIB1_BASE + ".library"), factor);
+			duplicateLibraryFile(templatesDir.resolve(Config.LIB2_BASE + ".library"),
+					dir.resolve(Config.LIB2_BASE + ".library"), factor);
+		}
+
+		/**
+		 * Parse a .books template and duplicate all book elements.
+		 */
+		private void duplicateBooksFile(Path template, Path output, int factor) throws IOException {
+			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
+			Files.createDirectories(output.getParent());
+			
+			// Pattern to match book elements: <books title="..."/>
+			Pattern bookPattern = Pattern.compile("\\s*<books\\s+title=\"([^\"]+)\"\\s*/>");
+			List<String> bookLines = new ArrayList<>();
+			List<String> otherLines = new ArrayList<>();
+			
+			for (String line : lines) {
+				Matcher m = bookPattern.matcher(line);
+				if (m.matches()) {
+					bookLines.add(line);
+				} else {
+					otherLines.add(line);
+				}
+			}
+			
+			// Write output: header lines + duplicated books + closing tag
+			try (var out = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
+				// Write all non-book lines except the closing tag
+				for (int i = 0; i < otherLines.size() - 1; i++) {
+					out.write(otherLines.get(i));
+					out.write("\n");
+				}
+				
+				// Duplicate book elements
+				for (int f = 0; f < factor; f++) {
+					for (String bookLine : bookLines) {
+						out.write(bookLine);
+						out.write("\n");
+					}
+				}
+				
+				// Write closing tag
+				out.write(otherLines.get(otherLines.size() - 1));
+				out.write("\n");
+			}
+		}
+
+		/**
+		 * Parse a .library template and duplicate all book references.
+		 */
+		private void duplicateLibraryFile(Path template, Path output, int factor) throws IOException {
+			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
+			Files.createDirectories(output.getParent());
+			
+			// Pattern to match book references: <books href="..."/>
+			Pattern refPattern = Pattern.compile("\\s*<books\\s+href=\"([^\"]+)\"\\s*/>");
+			List<String> refLines = new ArrayList<>();
+			List<String> otherLines = new ArrayList<>();
+			
+			for (String line : lines) {
+				Matcher m = refPattern.matcher(line);
+				if (m.matches()) {
+					refLines.add(line);
+				} else {
+					otherLines.add(line);
+				}
+			}
+			
+			// Write output: header lines + duplicated references + closing tag
+			try (var out = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
+				// Write all non-ref lines except the closing tag
+				for (int i = 0; i < otherLines.size() - 1; i++) {
+					out.write(otherLines.get(i));
+					out.write("\n");
+				}
+				
+				// Duplicate book references
+				for (int f = 0; f < factor; f++) {
+					for (String refLine : refLines) {
+						out.write(refLine);
+						out.write("\n");
+					}
+				}
+				
+				// Write closing tag
+				out.write(otherLines.get(otherLines.size() - 1));
+				out.write("\n");
+			}
+		}
+
+		/**
+		 * Count total model elements (books + library references) for reporting.
+		 */
+		private int countTotalElements(Path dir) throws IOException {
+			int total = 0;
+			Pattern bookPattern = Pattern.compile("\\s*<books\\s+title=\"[^\"]+\"\\s*/>");
+			Pattern refPattern = Pattern.compile("\\s*<books\\s+href=\"[^\"]+\"\\s*/>");
+			
+			for (String fileName : new String[]{
+					Config.DB1_BASE + ".books", Config.DB2_BASE + ".books",
+					Config.LIB1_BASE + ".library", Config.LIB2_BASE + ".library"}) {
+				Path file = dir.resolve(fileName);
+				if (Files.exists(file)) {
+					List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+					for (String line : lines) {
+						if (bookPattern.matcher(line).matches() || refPattern.matcher(line).matches()) {
+							total++;
+						}
+					}
+				}
+			}
+			return total;
 		}
 
 		private void generateFileGroup(Path dir, String tag, int groupIndex, int booksPerDB) throws IOException {
