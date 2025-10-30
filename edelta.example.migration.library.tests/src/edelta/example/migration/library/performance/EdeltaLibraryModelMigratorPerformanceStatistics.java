@@ -1,20 +1,19 @@
 package edelta.example.migration.library.performance;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import edelta.example.migration.library.migrator.LibraryModelMigrator;
 import edelta.testutils.EdeltaTestUtils;
@@ -185,143 +184,81 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		}
 
 		/**
-		 * Duplicate template files by the given factor. Factor 1 = original size.
-		 * This duplicates all elements in both .books and .library files.
+		 * Generate files with duplicated content by the given factor. Factor 1 = original template size.
+		 * This duplicates all elements in both .books and .library files programmatically.
 		 */
 		private void duplicateTemplatesWithFactor(Path dir, int factor) throws IOException {
-			Path templatesDir = Paths.get(Config.TEMPLATES_DIR);
+			// Generate .books files with duplicated book elements
+			// Template DB1 has: "first book", "second book"
+			writeBooksWithDuplication(dir.resolve(Config.DB1_BASE + ".books"), 
+					new String[]{"first book", "second book"}, factor);
+			// Template DB2 has: "another book", "yet another book"
+			writeBooksWithDuplication(dir.resolve(Config.DB2_BASE + ".books"), 
+					new String[]{"another book", "yet another book"}, factor);
 			
-			// Duplicate .books files
-			duplicateBooksFile(templatesDir.resolve(Config.DB1_BASE + ".books"),
-					dir.resolve(Config.DB1_BASE + ".books"), factor);
-			duplicateBooksFile(templatesDir.resolve(Config.DB2_BASE + ".books"),
-					dir.resolve(Config.DB2_BASE + ".books"), factor);
-			
-			// Duplicate .library files
-			duplicateLibraryFile(templatesDir.resolve(Config.LIB1_BASE + ".library"),
-					dir.resolve(Config.LIB1_BASE + ".library"), factor);
-			duplicateLibraryFile(templatesDir.resolve(Config.LIB2_BASE + ".library"),
-					dir.resolve(Config.LIB2_BASE + ".library"), factor);
+			// Generate .library files with duplicated book references
+			// Template LIB1 references: DB1[0], DB2[0]
+			writeLibraryWithDuplication(dir.resolve(Config.LIB1_BASE + ".library"),
+					Config.DB1_BASE + ".books", new int[]{0},
+					Config.DB2_BASE + ".books", new int[]{0}, factor);
+			// Template LIB2 references: DB1[1], DB2[1]
+			writeLibraryWithDuplication(dir.resolve(Config.LIB2_BASE + ".library"),
+					Config.DB1_BASE + ".books", new int[]{1},
+					Config.DB2_BASE + ".books", new int[]{1}, factor);
 		}
 
 		/**
-		 * Parse a .books template and duplicate all book elements.
+		 * Generate a .books file with duplicated book elements.
 		 */
-		private void duplicateBooksFile(Path template, Path output, int factor) throws IOException {
-			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
-			Files.createDirectories(output.getParent());
-			
-			// Pattern to match book elements: <books title="..."/>
-			Pattern bookPattern = Pattern.compile("\\s*<books\\s+title=\"([^\"]+)\"\\s*/>");
-			List<String> bookLines = new ArrayList<>();
-			List<String> otherLines = new ArrayList<>();
-			
-			for (String line : lines) {
-				Matcher m = bookPattern.matcher(line);
-				if (m.matches()) {
-					bookLines.add(line);
-				} else {
-					otherLines.add(line);
-				}
-			}
-			
-			// Write output: header lines + duplicated books + closing tag
-			try (var out = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
-				// Write all non-book lines except the closing tag
-				for (int i = 0; i < otherLines.size() - 1; i++) {
-					out.write(otherLines.get(i));
-					out.write("\n");
-				}
+		private static void writeBooksWithDuplication(Path path, String[] bookTitles, int factor) throws IOException {
+			Files.createDirectories(path.getParent());
+			try (var out = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+				out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+				out.write("<books:BookDatabase\n");
+				out.write("    xmi:version=\"2.0\"\n");
+				out.write("    xmlns:xmi=\"http://www.omg.org/XMI\"\n");
+				out.write("    xmlns:books=\"http://edelta/Books/v1\">\n");
 				
-				// Duplicate book elements
+				// Duplicate all book elements by the factor
 				for (int f = 0; f < factor; f++) {
-					for (String bookLine : bookLines) {
-						out.write(bookLine);
-						out.write("\n");
+					for (String title : bookTitles) {
+						out.write("  <books title=\"" + title + "\"/>\n");
 					}
 				}
 				
-				// Write closing tag
-				out.write(otherLines.get(otherLines.size() - 1));
-				out.write("\n");
+				out.write("</books:BookDatabase>\n");
 			}
 		}
 
 		/**
-		 * Parse a .library template and duplicate all book references.
-		 * Updates indices to reference the duplicated books correctly.
+		 * Generate a .library file with duplicated book references.
+		 * Indices are updated to reference the duplicated books correctly.
 		 */
-		private void duplicateLibraryFile(Path template, Path output, int factor) throws IOException {
-			if (!Files.exists(template)) {
-				throw new IOException("Template file not found: " + template.toAbsolutePath());
-			}
-			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
-			Files.createDirectories(output.getParent());
-			
-			// Pattern to match book references: <books href="file.books#//@books.INDEX"/>
-			Pattern refPattern = Pattern.compile("(\\s*<books\\s+href=\")([^#]+)(#//@books\\.)(\\d+)(\"\\s*/>)");
-			
-			// Store parsed references with their components
-			List<ParsedReference> refs = new ArrayList<>();
-			List<String> otherLines = new ArrayList<>();
-			
-			for (String line : lines) {
-				Matcher m = refPattern.matcher(line);
-				if (m.matches()) {
-					String indent = m.group(1);
-					String file = m.group(2);
-					String path = m.group(3);
-					int index = Integer.parseInt(m.group(4));
-					String suffix = m.group(5);
-					refs.add(new ParsedReference(indent, file, path, index, suffix));
-				} else {
-					otherLines.add(line);
-				}
-			}
-			
-			// Write output: header lines + duplicated references with updated indices + closing tag
-			try (var out = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
-				// Write all non-ref lines except the closing tag
-				for (int i = 0; i < otherLines.size() - 1; i++) {
-					out.write(otherLines.get(i));
-					out.write("\n");
-				}
+		private static void writeLibraryWithDuplication(Path path,
+				String db1File, int[] db1Indices,
+				String db2File, int[] db2Indices, int factor) throws IOException {
+			Files.createDirectories(path.getParent());
+			try (var out = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+				out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+				out.write("<library:Library\n");
+				out.write("    xmi:version=\"2.0\"\n");
+				out.write("    xmlns:xmi=\"http://www.omg.org/XMI\"\n");
+				out.write("    xmlns:library=\"http://edelta/Library/v1\">\n");
 				
-				// Count how many books exist in the original template (per database)
-				int originalBookCount = refs.size(); // assuming each ref points to different books
-				
-				// Duplicate book references with updated indices
+				// Duplicate all references by the factor, updating indices
+				int totalRefsPerIteration = db1Indices.length + db2Indices.length;
 				for (int f = 0; f < factor; f++) {
-					for (ParsedReference ref : refs) {
-						// Update index: original index + (f * originalBookCount)
-						int newIndex = ref.originalIndex + (f * originalBookCount);
-						out.write(ref.indent + ref.file + ref.path + newIndex + ref.suffix);
-						out.write("\n");
+					for (int idx : db1Indices) {
+						int newIndex = idx + (f * totalRefsPerIteration);
+						out.write("  <books href=\"" + db1File + "#//@books." + newIndex + "\"/>\n");
+					}
+					for (int idx : db2Indices) {
+						int newIndex = idx + (f * totalRefsPerIteration);
+						out.write("  <books href=\"" + db2File + "#//@books." + newIndex + "\"/>\n");
 					}
 				}
 				
-				// Write closing tag
-				out.write(otherLines.get(otherLines.size() - 1));
-				out.write("\n");
-			}
-		}
-		
-		/**
-		 * Helper class to store parsed book reference components.
-		 */
-		private static class ParsedReference {
-			final String indent;
-			final String file;
-			final String path;
-			final int originalIndex;
-			final String suffix;
-			
-			ParsedReference(String indent, String file, String path, int originalIndex, String suffix) {
-				this.indent = indent;
-				this.file = file;
-				this.path = path;
-				this.originalIndex = originalIndex;
-				this.suffix = suffix;
+				out.write("</library:Library>\n");
 			}
 		}
 
