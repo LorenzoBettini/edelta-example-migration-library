@@ -30,7 +30,7 @@ jobs:
     - name: Build with Maven
       uses: coactions/setup-xvfb@v1.0.1
       with:
-        run: mvn -f edelta.example.migration.library.parent -U verify
+        run: mvn -f edelta.example.migration.library.parent -U verify -Pperformance
 
     - name: Archive Test Results
       uses: actions/upload-artifact@v5
