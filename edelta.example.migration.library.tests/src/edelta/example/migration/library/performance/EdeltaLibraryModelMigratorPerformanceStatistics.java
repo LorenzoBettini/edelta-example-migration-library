@@ -140,22 +140,35 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			for (int factor = Config.SIZE_FACTOR_START;
 				 factor <= Config.SIZE_FACTOR_MAX;
 				 factor *= Config.SIZE_MULTIPLY) {
-				cleanDirectory(seriesDir);
-				duplicateTemplatesWithFactor(seriesDir, factor);
-				long best = Long.MAX_VALUE;
-				for (int it = 0; it < Config.ITERATIONS_PER_POINT; it++) {
-					// Re-generate to ensure models are at v1 for each iteration
+				try {
 					cleanDirectory(seriesDir);
 					duplicateTemplatesWithFactor(seriesDir, factor);
-					long t0 = System.nanoTime();
-					migrator.execute(seriesDir.toString());
-					long elapsed = System.nanoTime() - t0;
-					best = Math.min(best, elapsed);
+					// Count elements BEFORE migration (after generation)
+					int totalElements = countTotalElements(seriesDir);
+					
+					if (totalElements == 0) {
+						System.err.println("  WARNING: factor=" + factor + " resulted in 0 elements. Skipping.");
+						continue;
+					}
+					
+					long best = Long.MAX_VALUE;
+					for (int it = 0; it < Config.ITERATIONS_PER_POINT; it++) {
+						// Re-generate to ensure models are at v1 for each iteration
+						cleanDirectory(seriesDir);
+						duplicateTemplatesWithFactor(seriesDir, factor);
+						long t0 = System.nanoTime();
+						migrator.execute(seriesDir.toString());
+						long elapsed = System.nanoTime() - t0;
+						best = Math.min(best, elapsed);
+					}
+					
+					results.put(totalElements, best);
+					System.out.println("  factor=" + factor + ", totalElements=" + totalElements + " -> " + formatNanos(best));
+				} catch (Exception e) {
+					System.err.println("  ERROR at factor=" + factor + ": " + e.getMessage());
+					e.printStackTrace();
+					throw e;
 				}
-				// Count actual total elements for reporting
-				int totalElements = countTotalElements(seriesDir);
-				results.put(totalElements, best);
-				System.out.println("  factor=" + factor + ", totalElements=" + totalElements + " -> " + formatNanos(best));
 			}
 			return results;
 		}
@@ -178,6 +191,12 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		private void duplicateTemplatesWithFactor(Path dir, int factor) throws IOException {
 			Path templatesDir = Paths.get(Config.TEMPLATES_DIR);
 			
+			// Check if templates directory exists
+			if (!Files.exists(templatesDir)) {
+				throw new IOException("Templates directory not found: " + templatesDir.toAbsolutePath() + 
+					"\nCurrent working directory: " + Paths.get("").toAbsolutePath());
+			}
+			
 			// Duplicate .books files
 			duplicateBooksFile(templatesDir.resolve(Config.DB1_BASE + ".books"),
 					dir.resolve(Config.DB1_BASE + ".books"), factor);
@@ -195,6 +214,9 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		 * Parse a .books template and duplicate all book elements.
 		 */
 		private void duplicateBooksFile(Path template, Path output, int factor) throws IOException {
+			if (!Files.exists(template)) {
+				throw new IOException("Template file not found: " + template.toAbsolutePath());
+			}
 			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
 			Files.createDirectories(output.getParent());
 			
@@ -239,6 +261,9 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		 * Updates indices to reference the duplicated books correctly.
 		 */
 		private void duplicateLibraryFile(Path template, Path output, int factor) throws IOException {
+			if (!Files.exists(template)) {
+				throw new IOException("Template file not found: " + template.toAbsolutePath());
+			}
 			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
 			Files.createDirectories(output.getParent());
 			
