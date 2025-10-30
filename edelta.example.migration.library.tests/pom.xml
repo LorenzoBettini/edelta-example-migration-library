@@ -30,12 +30,19 @@
 	</dependencies>
 
 	<build>
-		<!-- Execute the example using exec-maven-plugin -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>3.6.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.6.2</version>
 				<executions>
 					<execution>
 						<id>run-library-migrator-example</id>
@@ -45,11 +52,14 @@
 						</goals>
 						<configuration>
 							<classpathScope>test</classpathScope>
-							<mainClass>edelta.example.migration.library.example.LibraryModelMigratorExample</mainClass>
+							<mainClass>
+								edelta.example.migration.library.example.LibraryModelMigratorExample</mainClass>
 							<arguments>
 								<argument>${project.basedir}</argument>
 							</arguments>
-							<cleanupDaemonThreads>false</cleanupDaemonThreads> <!-- see https://bugs.eclipse.org/bugs/show_bug.cgi?id=475098#c3 -->
+							<cleanupDaemonThreads>false</cleanupDaemonThreads> <!--
+							see
+							https://bugs.eclipse.org/bugs/show_bug.cgi?id=475098#c3 -->
 						</configuration>
 					</execution>
 				</executions>
@@ -65,7 +75,6 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.6.2</version>
 						<executions>
 							<execution>
 								<id>run-library-migrator-performance</id>
@@ -75,7 +84,8 @@
 								</goals>
 								<configuration>
 									<classpathScope>test</classpathScope>
-									<mainClass>edelta.example.migration.library.performance.EdeltaLibraryModelMigratorPerformanceStatistics</mainClass>
+									<mainClass>
+										edelta.example.migration.library.performance.EdeltaLibraryModelMigratorPerformanceStatistics</mainClass>
 									<cleanupDaemonThreads>false</cleanupDaemonThreads>
 								</configuration>
 							</execution>
