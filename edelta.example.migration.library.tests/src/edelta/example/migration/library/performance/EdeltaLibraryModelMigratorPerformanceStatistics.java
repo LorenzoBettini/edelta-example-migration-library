@@ -93,8 +93,8 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 			var warmDir = Config.PERF_BASE_DIR.resolve("warmup");
 			for (int i = 0; i < Config.WARMUP_ITERATIONS; i++) {
 				cleanDirectory(warmDir);
-				// Use original template size (factor=1) for warmup
-				duplicateTemplatesWithFactor(warmDir, 1);
+				// 1 group -> 4 files, minimal size (2 books per DB)
+				generateFileGroup(warmDir, "warm", 1, /*booksPerDB*/2);
 				long t0 = System.nanoTime();
 				migrator.execute(warmDir.toString());
 				long elapsed = System.nanoTime() - t0;
@@ -191,12 +191,6 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		private void duplicateTemplatesWithFactor(Path dir, int factor) throws IOException {
 			Path templatesDir = Paths.get(Config.TEMPLATES_DIR);
 			
-			// Check if templates directory exists
-			if (!Files.exists(templatesDir)) {
-				throw new IOException("Templates directory not found: " + templatesDir.toAbsolutePath() + 
-					"\nCurrent working directory: " + Paths.get("").toAbsolutePath());
-			}
-			
 			// Duplicate .books files
 			duplicateBooksFile(templatesDir.resolve(Config.DB1_BASE + ".books"),
 					dir.resolve(Config.DB1_BASE + ".books"), factor);
@@ -214,9 +208,6 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		 * Parse a .books template and duplicate all book elements.
 		 */
 		private void duplicateBooksFile(Path template, Path output, int factor) throws IOException {
-			if (!Files.exists(template)) {
-				throw new IOException("Template file not found: " + template.toAbsolutePath());
-			}
 			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
 			Files.createDirectories(output.getParent());
 			
