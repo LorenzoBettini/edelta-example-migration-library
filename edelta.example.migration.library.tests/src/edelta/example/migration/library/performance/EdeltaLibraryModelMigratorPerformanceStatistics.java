@@ -236,26 +236,34 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 
 		/**
 		 * Parse a .library template and duplicate all book references.
+		 * Updates indices to reference the duplicated books correctly.
 		 */
 		private void duplicateLibraryFile(Path template, Path output, int factor) throws IOException {
 			List<String> lines = Files.readAllLines(template, StandardCharsets.UTF_8);
 			Files.createDirectories(output.getParent());
 			
-			// Pattern to match book references: <books href="..."/>
-			Pattern refPattern = Pattern.compile("\\s*<books\\s+href=\"([^\"]+)\"\\s*/>");
-			List<String> refLines = new ArrayList<>();
+			// Pattern to match book references: <books href="file.books#//@books.INDEX"/>
+			Pattern refPattern = Pattern.compile("(\\s*<books\\s+href=\")([^#]+)(#//@books\\.)(\\d+)(\"\\s*/>)");
+			
+			// Store parsed references with their components
+			List<ParsedReference> refs = new ArrayList<>();
 			List<String> otherLines = new ArrayList<>();
 			
 			for (String line : lines) {
 				Matcher m = refPattern.matcher(line);
 				if (m.matches()) {
-					refLines.add(line);
+					String indent = m.group(1);
+					String file = m.group(2);
+					String path = m.group(3);
+					int index = Integer.parseInt(m.group(4));
+					String suffix = m.group(5);
+					refs.add(new ParsedReference(indent, file, path, index, suffix));
 				} else {
 					otherLines.add(line);
 				}
 			}
 			
-			// Write output: header lines + duplicated references + closing tag
+			// Write output: header lines + duplicated references with updated indices + closing tag
 			try (var out = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
 				// Write all non-ref lines except the closing tag
 				for (int i = 0; i < otherLines.size() - 1; i++) {
@@ -263,10 +271,15 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 					out.write("\n");
 				}
 				
-				// Duplicate book references
+				// Count how many books exist in the original template (per database)
+				int originalBookCount = refs.size(); // assuming each ref points to different books
+				
+				// Duplicate book references with updated indices
 				for (int f = 0; f < factor; f++) {
-					for (String refLine : refLines) {
-						out.write(refLine);
+					for (ParsedReference ref : refs) {
+						// Update index: original index + (f * originalBookCount)
+						int newIndex = ref.originalIndex + (f * originalBookCount);
+						out.write(ref.indent + ref.file + ref.path + newIndex + ref.suffix);
 						out.write("\n");
 					}
 				}
@@ -274,6 +287,25 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 				// Write closing tag
 				out.write(otherLines.get(otherLines.size() - 1));
 				out.write("\n");
+			}
+		}
+		
+		/**
+		 * Helper class to store parsed book reference components.
+		 */
+		private static class ParsedReference {
+			final String indent;
+			final String file;
+			final String path;
+			final int originalIndex;
+			final String suffix;
+			
+			ParsedReference(String indent, String file, String path, int originalIndex, String suffix) {
+				this.indent = indent;
+				this.file = file;
+				this.path = path;
+				this.originalIndex = originalIndex;
+				this.suffix = suffix;
 			}
 		}
 
