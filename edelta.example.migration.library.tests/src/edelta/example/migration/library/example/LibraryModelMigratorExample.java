@@ -11,9 +11,17 @@ import edelta.testutils.EdeltaTestUtils;
  */
 public class LibraryModelMigratorExample {
 
+	/**
+	 * Main method to run the migration example.
+	 * 
+	 * @param args command line arguments; the first argument can be the base directory
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
-		String inputDir = "inputs/v1";
-		String outputDir = "output/";
+		// Accept base directory as first argument, default to current directory
+		String baseDir = args.length > 0 ? args[0] : ".";
+		String inputDir = baseDir + "/inputs/v1";
+		String outputDir = baseDir + "/output/";
 		LibraryModelMigrator migrator = new LibraryModelMigrator();
 		// Copy input files to output directory
 		EdeltaTestUtils.cleanDirectoryRecursive(outputDir);

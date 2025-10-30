@@ -41,17 +41,15 @@
 						<id>run-library-migrator-example</id>
 						<phase>test</phase>
 						<goals>
-							<goal>exec</goal>
+							<goal>java</goal>
 						</goals>
 						<configuration>
-							<executable>java</executable>
 							<classpathScope>test</classpathScope>
-							<workingDirectory>${project.basedir}</workingDirectory>
+							<mainClass>edelta.example.migration.library.example.LibraryModelMigratorExample</mainClass>
 							<arguments>
-								<argument>-classpath</argument>
-								<classpath/>
-								<argument>edelta.example.migration.library.example.LibraryModelMigratorExample</argument>
+								<argument>${project.basedir}</argument>
 							</arguments>
+							<cleanupDaemonThreads>false</cleanupDaemonThreads> <!-- see https://bugs.eclipse.org/bugs/show_bug.cgi?id=475098#c3 -->
 						</configuration>
 					</execution>
 				</executions>
