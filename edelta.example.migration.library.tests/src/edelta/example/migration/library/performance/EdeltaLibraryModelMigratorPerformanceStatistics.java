@@ -17,6 +17,14 @@ import org.apache.log4j.Logger;
 import edelta.example.migration.library.migrator.LibraryModelMigrator;
 import edelta.testutils.EdeltaTestUtils;
 
+/**
+ * Measures performance of the Edelta LibraryModelMigrator by generating
+ * input models of varying size and number of files, and timing the migration.
+ * 
+ * The results are printed in CSV format for easy analysis.
+ * 
+ * @author Lorenzo Bettini
+ */
 public class EdeltaLibraryModelMigratorPerformanceStatistics {
 	public static void main(String[] args) throws Exception {
 		// Silence INFO logging for this execution only, keep WARNING and ERROR
@@ -40,7 +48,7 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		// Warm-up iterations before real measurements
 		static final int WARMUP_ITERATIONS = 1;
 
-		// How many iterations per measurement point (kept 1 as requested, but tweakable)
+		// How many iterations per measurement point
 		static final int ITERATIONS_PER_POINT = 1;
 
 		// Number-of-files series: from 4 to 1024 doubling
@@ -51,10 +59,10 @@ public class EdeltaLibraryModelMigratorPerformanceStatistics {
 		// Size series: duplication factor for template content, doubling up to max
 		// Factor 1 = original templates, Factor 2 = duplicate all elements once, etc.
 		static final int SIZE_FACTOR_START = 1;   // original template size
-		static final int SIZE_FACTOR_MAX = 2048;  // 2048x duplication gives ~8192 elements
+		static final int SIZE_FACTOR_MAX = 2048;  // 2048 times the original size
 		static final int SIZE_MULTIPLY = 2;
 
-		// Fixed names used by the templates
+		// Fixed names used for the generated files
 		static final String DB1_BASE = "MyBookDatabase1";
 		static final String DB2_BASE = "MyBookDatabase2";
 		static final String LIB1_BASE = "MyLibrary1";
