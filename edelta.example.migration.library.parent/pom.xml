@@ -55,6 +55,8 @@
 		<maven-javadoc-plugin-version>3.11.2</maven-javadoc-plugin-version>
 		<maven-source-plugin-version>3.3.1</maven-source-plugin-version>
 		<maven-gpg-plugin-version>3.2.7</maven-gpg-plugin-version>
+
+		<maven.deploy.skip>false</maven.deploy.skip>
 	</properties>
 
 	<modules>
@@ -165,27 +167,11 @@
 					<plugin>
 						<groupId>org.sonatype.central</groupId>
 						<artifactId>central-publishing-maven-plugin</artifactId>
-						<version>0.8.0</version>
+						<version>0.9.0</version>
 						<extensions>true</extensions>
 						<configuration>
 							<publishingServerId>central</publishingServerId>
-							<excludeArtifacts>
-								<excludeArtifact>
-									edelta.example.migration.library.edit
-								</excludeArtifact>
-								<excludeArtifact>
-									edelta.example.migration.library.editor
-								</excludeArtifact>
-								<excludeArtifact>
-									edelta.example.migration.library.tests
-								</excludeArtifact>
-								<excludeArtifact>
-									edelta.example.migration.library.ui.tests
-								</excludeArtifact>
-								<excludeArtifact>
-									edelta.example.migration.library.migrator.ui
-								</excludeArtifact>
-							</excludeArtifacts>
+							<skipPublishing>${maven.deploy.skip}</skipPublishing>
 						</configuration>
 					</plugin>
 					<plugin>
