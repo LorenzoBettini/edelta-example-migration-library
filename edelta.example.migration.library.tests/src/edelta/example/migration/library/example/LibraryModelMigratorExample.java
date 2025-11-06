@@ -1,0 +1,39 @@
+package edelta.example.migration.library.example;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import edelta.example.migration.library.migrator.LibraryModelMigrator;
+import edelta.testutils.EdeltaTestUtils;
+
+/**
+ * A simple example showing how to use the LibraryModelMigrator
+ * to migrate library models from an input directory to an output directory.
+ * 
+ * @author Lorenzo Bettini
+ */
+public class LibraryModelMigratorExample {
+
+	/**
+	 * Main method to run the migration example.
+	 * 
+	 * @param args command line arguments; the first argument can be the base directory
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		// Silence INFO logging for this execution only, keep WARNING and ERROR
+		Logger.getRootLogger().setLevel(Level.WARN);
+		// Accept base directory as first argument, default to current directory
+		String baseDir = args.length > 0 ? args[0] : ".";
+		String inputDir = baseDir + "/inputs/v1";
+		String outputDir = baseDir + "/output/";
+		System.out.println("Migrating models from " + inputDir + " to " + outputDir);
+		LibraryModelMigrator migrator = new LibraryModelMigrator();
+		// Copy input files to output directory
+		EdeltaTestUtils.cleanDirectoryRecursive(outputDir);
+		EdeltaTestUtils.copyDirectory(inputDir, outputDir);
+		// Apply migration
+		migrator.execute(outputDir);
+		System.out.println("Migration completed successfully.");
+	}
+}
