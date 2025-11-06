@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: edelta.example.migration.library.editor;singleton:=true
 Automatic-Module-Name: edelta.example.migration.library.editor
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: library.presentation.LibraryEditorPlugin$Implementation
 Bundle-Vendor: %providerName
