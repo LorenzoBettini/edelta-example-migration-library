@@ -150,8 +150,15 @@
 		mvn -U -f edelta.example.migration.library.parent deploy -DskipTests -Psonatype-oss-release
 		find ~/.m2/repository/ -name "*library*" -exec rm -rf {} \+
 
+		To increment version:
+		mvn -f edelta.example.migration.library.parent \
+			versions:set \
+			org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata \
+			-DgenerateBackupPoms=false \
+			-DnewVersion=1.0.1-SNAPSHOT
+
 		For release deployment, first run:
-		mvn -f edelta.example.migration.library.parent \                                                 
+		mvn -f edelta.example.migration.library.parent \
 			versions:set \
 			org.eclipse.tycho:tycho-versions-plugin:update-eclipse-metadata \
 			-DgenerateBackupPoms=false \
