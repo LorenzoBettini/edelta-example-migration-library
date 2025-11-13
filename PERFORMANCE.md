@@ -106,7 +106,7 @@ Measuring impact of model size (constant number of files = 4)...
   factor=8, totalElements=64 -> 14.04 ms
   factor=16, totalElements=128 -> 12.11 ms
   factor=32, totalElements=256 -> 40.65 ms
-  factor=64, totalElements=512 ->  91.58 ms
+  factor=64, totalElements=512 -> 91.58 ms
   factor=128, totalElements=1024 -> 130.56 ms
   factor=256, totalElements=2048 -> 132.63 ms
   factor=512, totalElements=4096 -> 175.42 ms
